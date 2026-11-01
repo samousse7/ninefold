@@ -1,0 +1,39 @@
+name: Shrink card images
+
+# Runs whenever images are added to images/cards on main,
+# and shrinks any large ones so the game stays fast on the iPad.
+on:
+  push:
+    branches: [main]
+    paths: ["images/cards/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  shrink:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Shrink large images
+        run: |
+          pip install --quiet pillow
+          python scripts/shrink_images.py
+
+      - name: Commit if anything changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add images/cards
+          if git diff --cached --quiet; then
+            echo "Nothing to shrink"
+          else
+            git commit -m "Shrink card images"
+            git push
+          fi
