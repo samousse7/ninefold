@@ -121,6 +121,11 @@ h3{margin:0;font:700 1rem/1.2 var(--f-display);color:var(--gold-hi);letter-spaci
 .card.p{--artbg:radial-gradient(circle at 64% 62%,#86bcff 0%,#2a64c9 46%,#0f275a 100%)}
 .card.o{--artbg:radial-gradient(circle at 64% 62%,#ffa3b7 0%,#b42a4c 46%,#470a1e 100%)}
 .card.n{--artbg:radial-gradient(circle at 64% 62%,#9aa3d8 0%,#3e4790 50%,#151a4a 100%)}
+.card .art .pic{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:var(--pos,50% 40%);display:block}
+.card.has-pic .art::after{background:radial-gradient(75% 65% at 0% 0%,rgba(0,0,0,.72),transparent 68%)}
+.card.has-pic .gl{display:none}
+.card.has-pic.p{box-shadow:0 0 0 2px #6fa8ff,0 0 12px rgba(111,168,255,.75),0 2px 6px rgba(0,0,0,.55)}
+.card.has-pic.o{box-shadow:0 0 0 2px #ff7f9b,0 0 12px rgba(255,127,155,.7),0 2px 6px rgba(0,0,0,.55)}
 .card .art::after{content:"";position:absolute;top:0;right:0;bottom:0;left:0;background:linear-gradient(160deg,rgba(255,255,255,.22),transparent 40%)}
 .card.t3 .art::before,.card.t4 .art::before{content:"";position:absolute;top:-30%;right:-30%;bottom:-30%;left:-30%;background:radial-gradient(circle at 64% 62%,rgba(255,255,255,.35),transparent 30%);mix-blend-mode:screen}
 .card .gl{position:absolute;right:5%;bottom:3%;font-size:50cqw;line-height:1;filter:drop-shadow(0 3px 2px rgba(0,0,0,.45))}
@@ -376,6 +381,15 @@ button.slot:hover,button.slot:focus-visible{border-color:var(--gold-hi);backgrou
 /* ================= DATA ================= */
 const EL={f:{n:"Fire",g:"🔥"},i:{n:"Ice",g:"❄️"},t:{n:"Thunder",g:"⚡"},e:{n:"Earth",g:"⛰️"},p:{n:"Poison",g:"☠️"},w:{n:"Wind",g:"🌀"},a:{n:"Water",g:"💧"},h:{n:"Holy",g:"✨"}};
 const ELK=Object.keys(EL);
+/* ===== CARD ART =====
+   Illustrations live in the images/cards folder.
+   To add one: upload the image to images/cards, then add a line below:
+     "Card name exactly as in the game": "file-name.jpg",
+   To change the framing, use a list instead, e.g. ["file-name.jpg","50% 20%"]
+   ("50% 20%" keeps more of the top of the image). */
+const CARD_ART={
+  "Burrow Rat": "burrow-rat.jpg",
+};
 const RAW=[
  [["Mire Toad","🐸","a"],["Burrow Rat","🐀",""],["Ember Moth","🦋","f"],["Tide Crab","🦀","a"],["Husk Beetle","🪲","e"],["Dusk Bat","🦇",""],["Bog Slug","🐌","p"],["Pale Grub","🐛",""],["Gale Sparrow","🐦","w"],["Spine Hog","🦔",""],["Fen Gnat","🦟","p"]],
  [["Cinder Hound","🐕","f"],["Frost Hare","🐇","i"],["Silk Spider","🕷️","p"],["Stone Tortoise","🐢","e"],["Spark Fly","🪰","t"],["Glade Fox","🦊",""],["Reed Viper","🐍","p"],["Gloom Owl","🦉",""],["Tusk Boar","🐗","e"],["Brine Squid","🦑","a"],["Hollow Shade","👻",""]],
@@ -748,7 +762,9 @@ function goBack(){const r=retView[view]||(save?"map":"title");go(r);}
 
 function cardHTML(cid,own,cls="",extra=""){
   const c=CARDS[cid];
-  return `<div class="card ${own} t${tierOf(c.lv)} ${cls}" title="${esc(c.n)}"><div class="art"><span class="gl">${c.g}</span></div>`+
+  const art=CARD_ART[c.n],pic=art?(Array.isArray(art)?art:[art]):null;
+  const img=pic?`<img class="pic" src="images/cards/${esc(pic[0])}" alt="" loading="lazy" decoding="async"${pic[1]?` style="--pos:${esc(pic[1])}"`:""} onerror="this.closest('.card').classList.remove('has-pic');this.remove()">`:"";
+  return `<div class="card ${own} t${tierOf(c.lv)} ${pic?"has-pic":""} ${cls}" title="${esc(c.n)}"><div class="art">${img}<span class="gl">${c.g}</span></div>`+
     `<div class="rk"><b class="r0">${rv(c.r[0])}</b><b class="r3">${rv(c.r[3])}</b><b class="r1">${rv(c.r[1])}</b><b class="r2">${rv(c.r[2])}</b></div>`+
     (c.e?`<i class="el">${EL[c.e].g}</i>`:"")+extra+`</div>`;
 }
