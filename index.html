@@ -125,8 +125,8 @@ h3{margin:0;font:700 1rem/1.2 var(--f-display);color:var(--gold-hi);letter-spaci
 .card.has-pic .art{isolation:isolate}
 .card.has-pic .art::after{z-index:2;background:radial-gradient(75% 65% at 0% 0%,rgba(0,0,0,.72),transparent 68%)}
 .card.has-pic.p .art::before,.card.has-pic.o .art::before{content:"";position:absolute;top:0;right:0;bottom:0;left:0;z-index:1;pointer-events:none;mix-blend-mode:normal;border-radius:inherit}
-.card.has-pic.p .art::before{background:none;box-shadow:inset 0 0 0 4px #3d7dff,inset 0 0 0 5px rgba(0,0,0,.35);box-shadow:inset 0 0 0 3.5cqw #3d7dff,inset 0 0 0 calc(3.5cqw + 1px) rgba(0,0,0,.35)}
-.card.has-pic.o .art::before{background:none;box-shadow:inset 0 0 0 4px #ff4f75,inset 0 0 0 5px rgba(0,0,0,.35);box-shadow:inset 0 0 0 3.5cqw #ff4f75,inset 0 0 0 calc(3.5cqw + 1px) rgba(0,0,0,.35)}
+.card.has-pic.p .art::before{background:none;box-shadow:inset 0 0 0 3px #3d7dff,inset 0 0 0 4px rgba(0,0,0,.35);box-shadow:inset 0 0 0 2.6cqw #3d7dff,inset 0 0 0 calc(2.6cqw + 1px) rgba(0,0,0,.35)}
+.card.has-pic.o .art::before{background:none;box-shadow:inset 0 0 0 3px #ff4f75,inset 0 0 0 4px rgba(0,0,0,.35);box-shadow:inset 0 0 0 2.6cqw #ff4f75,inset 0 0 0 calc(2.6cqw + 1px) rgba(0,0,0,.35)}
 .card.has-pic .gl{display:none}
 .card.has-pic.p{box-shadow:0 0 0 2px #6fa8ff,0 0 12px rgba(111,168,255,.75),0 2px 6px rgba(0,0,0,.55)}
 .card.has-pic.o{box-shadow:0 0 0 2px #ff7f9b,0 0 12px rgba(255,127,155,.7),0 2px 6px rgba(0,0,0,.55)}
@@ -139,6 +139,29 @@ h3{margin:0;font:700 1rem/1.2 var(--f-display);color:var(--gold-hi);letter-spaci
 .card .r0{left:32.9%;top:0}.card .r3{left:0;top:34%}.card .r1{left:65.8%;top:34%}.card .r2{left:32.9%;bottom:0}
 .card .el{position:absolute;top:6%;right:7%;font-size:15cqw;font-style:normal;line-height:1;filter:drop-shadow(0 1px 1px #000)}
 .card .mod{position:absolute;left:7%;bottom:5%;font:800 13cqw/1 var(--f-body);text-shadow:0 0 2px #000,1px 1px 0 #000}
+/* ---------- rarity frames: plain (lv 1-4), gold (lv 5-7), premium (lv 8-10) ---------- */
+.card .rk,.card .el,.card .mod{z-index:4}
+.card .orn{position:absolute;top:0;right:0;bottom:0;left:0;pointer-events:none;z-index:3;border-radius:inherit}
+.card .orn i{position:absolute;width:var(--cw,13%);height:var(--cw,13%);background:var(--corner) no-repeat center/contain}
+.card .orn i:nth-child(1){left:0;top:0}
+.card .orn i:nth-child(2){right:0;top:0;transform:rotate(90deg)}
+.card .orn i:nth-child(3){right:0;bottom:0;transform:rotate(180deg)}
+.card .orn i:nth-child(4){left:0;bottom:0;transform:rotate(270deg)}
+.card.fr1{--frame:linear-gradient(150deg,var(--ec1,#8f97b3),var(--ec2,#3f4660))}
+.card.fr1.e-f{--ec1:#d98b5c;--ec2:#7a2f16}.card.fr1.e-i{--ec1:#a9d8ee;--ec2:#3d6f8f}
+.card.fr1.e-t{--ec1:#c9b3f0;--ec2:#5a3f96}.card.fr1.e-e{--ec1:#a8b88a;--ec2:#4f5a38}
+.card.fr1.e-p{--ec1:#b28fd0;--ec2:#4f2f6a}.card.fr1.e-w{--ec1:#b8e0c4;--ec2:#4a7a5c}
+.card.fr1.e-a{--ec1:#86d1d6;--ec2:#22626e}.card.fr1.e-h{--ec1:#f3e6b8;--ec2:#9a8650}
+.card.fr2{--frame:linear-gradient(145deg,#fff2b8 0%,#e0ac48 28%,#8a5a18 52%,#e9c262 76%,#fff0b0 100%);--corner:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23fff1bf' stroke-width='6' stroke-linecap='round'%3E%3Cpath d='M10 70 V28 Q10 10 28 10 H70'/%3E%3C/g%3E%3Cpath d='M10 10 l9 -9 l9 9 l-9 9z' fill='%23ffe07a' stroke='%237a5414' stroke-width='2' transform='translate(-1 9)'/%3E%3C/svg%3E");--cw:17%;box-shadow:0 0 0 1px rgba(255,236,170,.35),0 2px 6px rgba(0,0,0,.55)}
+.card.fr2 .art{top:6%;right:6%;bottom:6%;left:6%}
+.card.fr2 .orn::before{content:"";position:absolute;top:2.8%;right:2.8%;bottom:2.8%;left:2.8%;border-radius:8%;box-shadow:inset 0 0 0 1px rgba(255,246,210,.85),inset 0 0 0 2px rgba(110,70,15,.5)}
+.card.fr3{--frame:conic-gradient(from 200deg,#fff6c8,#d59a2c,#fff0b0,#8a5a18,#ffe39a,#b07f22,#fff6c8);--corner:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke-linecap='round'%3E%3Cpath d='M9 94 V34 Q9 9 34 9 H94' stroke='%23fff4cf' stroke-width='5'/%3E%3Cpath d='M22 78 C22 52 30 40 44 36 C34 44 34 56 44 60 C52 62 58 54 52 46' stroke='%23ffe48a' stroke-width='4'/%3E%3Cpath d='M78 22 C52 22 40 30 36 44 C44 34 56 34 60 44 C62 52 54 58 46 52' stroke='%23ffe48a' stroke-width='4'/%3E%3C/g%3E%3Ccircle cx='9' cy='9' r='8' fill='%23ffdf6e' stroke='%237a5414' stroke-width='2.5'/%3E%3Ccircle cx='9' cy='9' r='3.2' fill='%23fff8dd'/%3E%3C/svg%3E");--cw:30%;box-shadow:0 0 0 1.5px rgba(255,236,170,.8),0 0 16px rgba(255,214,110,.6),0 2px 6px rgba(0,0,0,.55)}
+.card.fr3 .art{top:8%;right:8%;bottom:8%;left:8%}
+.card.fr3 .orn::before{content:"";position:absolute;top:4%;right:4%;bottom:4%;left:4%;border-radius:8%;box-shadow:inset 0 0 0 1.5px #fff4cf,inset 0 0 0 3px rgba(110,70,15,.55)}
+.card.fr3 .orn::after{content:"";position:absolute;top:0;right:0;bottom:0;left:0;border-radius:inherit;background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.42) 48%,rgba(255,240,200,.25) 52%,transparent 62%);background-size:260% 100%;background-position:130% 0;mix-blend-mode:screen}
+@media (prefers-reduced-motion:no-preference){.card.fr3 .orn::after{animation:holo 5.5s ease-in-out infinite}}
+@keyframes holo{0%,35%{background-position:130% 0}75%,100%{background-position:-30% 0}}
+.card.fr3.t4 .orn::after{background:linear-gradient(115deg,transparent 36%,rgba(255,170,230,.28) 44%,rgba(170,220,255,.30) 50%,rgba(200,255,210,.26) 56%,transparent 64%);background-size:260% 100%;background-position:130% 0}
 .card .mod.up{color:var(--good)}.card .mod.dn{color:var(--bad)}
 .card.back{--frame:linear-gradient(145deg,#ffe6a0,#8a6420)}
 .card.back .sig{position:absolute;top:3.5%;right:3.5%;bottom:3.5%;left:3.5%;border-radius:7%;
@@ -948,7 +971,8 @@ function cardHTML(cid,own,cls="",extra=""){
   const c=CARDS[cid];
   const art=!ART_MISSING[c.n]&&CARD_ART[c.n],pic=art?(Array.isArray(art)?art:[art]):null;
   const img=pic?`<div class="pic" style="background-image:url('images/cards/${esc(pic[0])}')${pic[1]?`;--pos:${esc(pic[1])}`:""}"></div>`:"";
-  return `<div class="card ${own} t${tierOf(c.lv)} ${pic?"has-pic":""} ${cls}" title="${esc(c.n)}"><div class="art">${img}<span class="gl">${c.g}</span></div>`+
+  const fr=c.lv<=4?1:c.lv<=7?2:3,orn=fr>1?`<span class="orn"><i></i><i></i><i></i><i></i></span>`:"";
+  return `<div class="card ${own} t${tierOf(c.lv)} fr${fr} e-${c.e||"n"} ${pic?"has-pic":""} ${cls}" title="${esc(c.n)}"><div class="art">${img}<span class="gl">${c.g}</span></div>${orn}`+
     `<div class="rk"><b class="r0">${rv(c.r[0])}</b><b class="r3">${rv(c.r[3])}</b><b class="r1">${rv(c.r[1])}</b><b class="r2">${rv(c.r[2])}</b></div>`+
     (c.e?`<i class="el">${EL[c.e].g}</i>`:"")+extra+`</div>`;
 }
