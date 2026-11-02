@@ -251,7 +251,7 @@ h3{margin:0;font:700 1rem/1.2 var(--f-display);color:var(--gold-hi);letter-spaci
 .cell .card{position:absolute;top:0;right:0;bottom:0;left:0;height:100%}
 .cell.tg{cursor:pointer;border-color:var(--gold);box-shadow:inset 0 0 0 1px rgba(255,234,176,.4),0 0 14px rgba(240,207,120,.3)}
 .cell.pend{border-color:var(--gold-hi);box-shadow:0 0 0 2px var(--gold-hi),0 0 18px rgba(255,234,176,.5)}
-.cell .cel{font-size:34cqw;opacity:.35;filter:saturate(.7)}
+.cell .cel{font-size:34cqw;line-height:1;opacity:.35}
 .cell.has-el{background:radial-gradient(circle,rgba(146,232,255,.12),transparent 70%)}
 .cell .hint{position:absolute;right:6%;top:5%;z-index:3;font:800 15cqw/1 var(--f-body);color:var(--gold-hi);text-shadow:0 0 3px #000,1px 1px 0 #000}
 .status{font-size:.88rem;color:var(--muted);min-height:1.4em;text-align:center;text-shadow:1px 1px 0 #000}
@@ -1469,6 +1469,19 @@ const NO_CQ=!(window.CSS&&CSS.supports&&CSS.supports("container-type","inline-si
 function fitCards(){if(!NO_CQ)return;document.querySelectorAll(".card,.cell").forEach(el=>{const w=el.offsetWidth;if(w)el.style.fontSize=(w/10)+"px";});}
 window.addEventListener("resize",()=>fitCards());
 /* ================= RENDER & EVENTS ================= */
+let lastRenderView=null;
+function morphNode(a,b){
+  if(a.nodeType!==b.nodeType||a.nodeName!==b.nodeName){a.replaceWith(b);return;}
+  if(a.nodeType!==1){if(a.nodeValue!==b.nodeValue)a.nodeValue=b.nodeValue;return;}
+  for(const at of [...a.attributes])if(!b.hasAttribute(at.name))a.removeAttribute(at.name);
+  for(const at of [...b.attributes])if(a.getAttribute(at.name)!==at.value)a.setAttribute(at.name,at.value);
+  morphKids(a,b);
+}
+function morphKids(a,b){
+  const ac=[...a.childNodes],bc=[...b.childNodes];
+  for(let i=0;i<bc.length;i++){if(i<ac.length)morphNode(ac[i],bc[i]);else a.appendChild(bc[i]);}
+  for(let i=bc.length;i<ac.length;i++)ac[i].remove();
+}
 function render(){
   let h="";
   const needGame=["map","pre","deck","album","menu","save","records","match","free","shop","perks"];
@@ -1491,7 +1504,12 @@ function render(){
     case "perks":h=renderPerks();break;
     case "match":h=match?renderMatch():renderMap();break;
   }
-  app.innerHTML=h+(save?renderModal()+renderReveal():"");
+  const html=h+(save?renderModal()+renderReveal():"");
+  // During a duel, update the board in place instead of rebuilding it,
+  // so element squares, cards and images don't jump on every redraw.
+  if(view==="match"&&lastRenderView==="match"&&app.firstChild){const t=document.createElement("div");t.innerHTML=html;morphKids(app,t);}
+  else app.innerHTML=html;
+  lastRenderView=view;
   fitCards();
   Music.update();
 }
