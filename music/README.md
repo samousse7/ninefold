@@ -1,6 +1,7 @@
 # Music
 
-Upload the game's background tracks here as MP3 files with exactly these names.
+Upload the game's background tracks here with exactly these names (MP3, or WAV/M4A which are converted to MP3).
+The GitHub Action compresses them automatically and adds them to the offline copy of the game.
 Any track that is missing is skipped: boss duels fall back to the region track,
 and a region falls back to the title track.
 

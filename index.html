@@ -5,10 +5,32 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="Ninefold, a fantasy card duel game. Collect 110 cards across seven regions.">
 <title>Ninefold</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@500;700&family=Alegreya+Sans:wght@400;500;700;800&display=swap">
+<meta name="theme-color" content="#03051a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Ninefold">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <style>
+/* Fonts are stored in the repo so the game looks right offline (SIL Open Font License, see fonts/LICENSE-*.txt) */
+@font-face{font-family:"Cinzel Decorative";font-style:normal;font-weight:700;font-display:swap;src:url(fonts/cinzel-decorative-latin-ext-700-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Cinzel Decorative";font-style:normal;font-weight:700;font-display:swap;src:url(fonts/cinzel-decorative-latin-700-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Cinzel Decorative";font-style:normal;font-weight:900;font-display:swap;src:url(fonts/cinzel-decorative-latin-ext-900-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Cinzel Decorative";font-style:normal;font-weight:900;font-display:swap;src:url(fonts/cinzel-decorative-latin-900-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Cinzel";font-style:normal;font-weight:500;font-display:swap;src:url(fonts/cinzel-latin-ext-500-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Cinzel";font-style:normal;font-weight:500;font-display:swap;src:url(fonts/cinzel-latin-500-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Cinzel";font-style:normal;font-weight:700;font-display:swap;src:url(fonts/cinzel-latin-ext-700-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Cinzel";font-style:normal;font-weight:700;font-display:swap;src:url(fonts/cinzel-latin-700-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Alegreya Sans";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/alegreya-sans-latin-ext-400-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Alegreya Sans";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/alegreya-sans-latin-400-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Alegreya Sans";font-style:normal;font-weight:500;font-display:swap;src:url(fonts/alegreya-sans-latin-ext-500-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Alegreya Sans";font-style:normal;font-weight:500;font-display:swap;src:url(fonts/alegreya-sans-latin-500-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Alegreya Sans";font-style:normal;font-weight:700;font-display:swap;src:url(fonts/alegreya-sans-latin-ext-700-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Alegreya Sans";font-style:normal;font-weight:700;font-display:swap;src:url(fonts/alegreya-sans-latin-700-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Alegreya Sans";font-style:normal;font-weight:800;font-display:swap;src:url(fonts/alegreya-sans-latin-ext-800-normal.woff2) format("woff2");unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:"Alegreya Sans";font-style:normal;font-weight:800;font-display:swap;src:url(fonts/alegreya-sans-latin-800-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 /* Layout: a night-sky world behind classic blue RPG menu windows. Phone stacks opponent hand / board / your hand; desktop puts hands beside the board. */
 :root{
   --sky-0:#03051a; --sky-1:#0a1145; --sky-2:#1c2c8c;
@@ -326,6 +348,15 @@ button.slot:hover,button.slot:focus-visible{border-color:var(--gold-hi);backgrou
 .seg button.on{background:var(--gold);color:#2a1c05}
 @media (max-width:460px){.opt{grid-template-columns:1fr}.opt .seg{justify-self:start}}
 .field{display:grid;gap:6px}
+.updbar{position:fixed;left:50%;bottom:calc(66px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:70;max-width:calc(100% - 32px);
+  display:flex;align-items:center;gap:10px;padding:8px 10px 8px 16px;border-radius:12px;border:2px solid var(--gold);color:var(--text);font:700 .92rem var(--f-body);
+  background:linear-gradient(180deg,var(--win-top),var(--win-bot));box-shadow:inset 0 0 0 2px var(--win-ink),0 8px 24px rgba(0,0,0,.55);text-shadow:1px 1px 0 #000}
+.updbar b{background:linear-gradient(180deg,var(--gold-hi),var(--gold));color:#2a1a00;text-shadow:none;border-radius:8px;padding:5px 10px;white-space:nowrap}
+.updbar[hidden]{display:none}
+.xfer{display:grid;gap:8px;margin-top:6px}
+.xfer textarea{font:500 .8rem/1.35 ui-monospace,Menlo,monospace;color:var(--text);background:rgba(3,5,30,.6);border:1px solid rgba(230,234,252,.5);border-radius:8px;padding:10px;min-height:96px;width:100%;box-sizing:border-box;resize:vertical;word-break:break-all}
+.offst{font-size:.85rem;color:var(--muted)}
+.offst b{color:var(--good)}
 .field input{font:700 1.05rem var(--f-body);color:var(--text);background:rgba(3,5,30,.6);border:1px solid rgba(230,234,252,.5);border-radius:8px;padding:10px 12px;width:100%;box-sizing:border-box}
 .recs{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;font-variant-numeric:tabular-nums}
 .recs div{display:grid;gap:2px}
@@ -393,6 +424,7 @@ button.slot:hover,button.slot:focus-visible{border-color:var(--gold-hi);backgrou
 <canvas id="fx" aria-hidden="true"></canvas>
 <div id="app"></div>
 <div id="toast" class="toast" hidden></div>
+<button id="updbar" class="updbar" hidden>New version available <b>Update</b></button>
 
 <script>
 (function(){
@@ -1058,7 +1090,26 @@ const OPTS=[
 function segHTML(k,choices){return `<div class="seg" role="group">${choices.map(([v,l])=>`<button class="${opt()[k]===v?"on":""}" data-a="opt" data-k="${k}" data-v="${String(v)}" aria-pressed="${opt()[k]===v}">${l}</button>`).join("")}</div>`;}
 function renderOptions(){
   return header(save?"menu":"")+`<div class="win"><p class="win-t">Options</p>${OPTS.map(([k,n,d,ch])=>`<div class="opt"><div><div style="font-weight:800">${n}</div><div class="d">${d}</div></div>${segHTML(k,ch)}</div>`).join("")}
-  <div class="row" style="margin-top:10px"><button class="btn ghost" data-a="back">Back</button></div></div>`;
+  <div class="row" style="margin-top:10px"><button class="btn ghost" data-a="back">Back</button></div></div>
+  ${renderOffline()}`;
+}
+function renderOffline(){
+  const inst=PWA.standalone();
+  let x="";
+  if(xfer&&xfer.mode==="out")x=`<div class="xfer"><div class="d">Copy this code, then open the other copy of the game (the installed app or another device), go to Options and tap Import saves.${dirty?` <span style="color:var(--red-hi)">Unsaved progress in your current game is not included: save first.</span>`:""}</div>
+    <textarea id="xout" readonly>${esc(xfer.code)}</textarea>
+    <div class="row"><button class="btn sm" data-a="x-copy">Copy code</button>${navigator.share?`<button class="btn ghost sm" data-a="x-share">Share</button>`:""}<button class="btn ghost sm" data-a="x-close">Done</button></div></div>`;
+  if(xfer&&xfer.mode==="in")x=`<div class="xfer"><div class="d">Paste a save code. This replaces all three save slots on this device.</div>
+    <textarea id="xin" placeholder="NF1...">${esc(xfer.text||"")}</textarea>
+    ${xfer.err?`<div class="sub" style="color:var(--red-hi)">${esc(xfer.err)}</div>`:""}
+    ${xfer.ready?`<div class="sub" style="color:var(--red-hi)">Found ${xfer.ready}. Replace the saves on this device?</div><div class="row"><button class="btn danger sm" data-a="x-apply">Replace my saves</button><button class="btn ghost sm" data-a="x-close">Cancel</button></div>`
+      :`<div class="row"><button class="btn sm" data-a="x-check">Import</button><button class="btn ghost sm" data-a="x-close">Cancel</button></div>`}</div>`;
+  return `<div class="win" style="margin-top:14px"><p class="win-t">Offline &amp; Saves</p>
+   <div class="opt"><div><div style="font-weight:800">Play offline</div><div class="d offst" id="offst">${PWA.line()}</div>
+     ${inst?"":`<div class="d" style="margin-top:4px">To install on iPad or iPhone: open the game in Safari, tap Share, then Add to Home Screen. The installed app keeps its own saves, so export them here and import them in the app.</div>`}</div></div>
+   <div class="opt"><div><div style="font-weight:800">Transfer saves</div><div class="d">Move your journeys between Safari, the installed app or another device with a save code.</div></div>
+     <div class="row" style="gap:6px"><button class="btn ghost sm" data-a="x-out">Export</button><button class="btn ghost sm" data-a="x-in">Import</button></div></div>
+   ${x}</div>`;
 }
 function renderGuide(){
   return header(save?"menu":"")+`<div class="win guide"><p class="win-t">How to Play</p><dl style="margin:0">
@@ -1563,6 +1614,8 @@ function render(){
   lastRenderView=view;
   fitCards();
   Music.update();
+  PWA.bar();
+  if(view==="options")PWA.paint();
 }
 function parseVal(v){return v==="true"?true:v==="false"?false:v;}
 const H={
@@ -1646,6 +1699,22 @@ const H={
     const nid=randLv(c.lv+1),fresh=addCards([nid]);
     if(!deckValid(save.deck,save.col))save.deck=autoDeck(save.col);
     modal=null;reveal={title:"Card Refine",ids:[nid],fresh};sfx.rule();autosave();render();},
+  async "x-out"(){const obj={k:"ninefold",v:1,at:Date.now(),meta:store.local("meta"),slots:{1:store.local("slot1"),2:store.local("slot2"),3:store.local("slot3")}};
+    xfer={mode:"out",code:await packSave(obj)};render();},
+  "x-in"(){xfer={mode:"in",text:""};render();setTimeout(()=>{const t=document.getElementById("xin");if(t)t.focus();},50);},
+  "x-close"(){xfer=null;render();},
+  async "x-copy"(){const code=xfer&&xfer.code;if(!code)return;
+    try{await navigator.clipboard.writeText(code);toast("Save code copied");}
+    catch(e){const t=document.getElementById("xout");if(t){t.focus();t.select();try{document.execCommand("copy");toast("Save code copied");}catch(e2){toast("Select the code and copy it");}}}},
+  "x-share"(){if(xfer&&xfer.code&&navigator.share)navigator.share({title:"Ninefold saves",text:xfer.code}).catch(()=>{});},
+  async "x-check"(){try{const o=await unpackSave(xfer.text||"");const n=[1,2,3].filter(k=>o.slots&&o.slots[k]).map(k=>o.slots[k].name);
+      xfer.data=o;xfer.err=null;xfer.ready=n.length?n.length+" journey"+(n.length>1?"s":"")+" ("+n.map(esc).join(", ")+")":"no journeys (empty slots)";}
+    catch(e){xfer.err=e===1?"This browser can't read compressed codes. Update iOS or try another browser.":"That doesn't look like a Ninefold save code.";xfer.ready=null;}
+    render();},
+  "x-apply"(){const o=xfer&&xfer.data;if(!o)return;
+    if(o.meta)store.put("meta",o.meta);
+    for(const n of [1,2,3])store.put("slot"+n,o.slots&&o.slots[n]?normalize(o.slots[n]):null);
+    bootLocal();applyOptions();save=null;match=null;dirty=false;activeSlot=0;xfer=null;go("title");toast("Saves imported");},
   rewind(){const m=match;if(!m||m.busy||m.phase!=="play"||m.st.turn!=="p"||!m.hist||m.rewound||!has("rewind"))return;
     m.st=m.hist;m.hist=null;m.rewound=true;m.sel=null;m.pend=null;render();toast("Rewound to your last turn");},
 
@@ -1657,14 +1726,79 @@ app.addEventListener("click",e=>{
   if(!QUIET.has(t.dataset.a))sfx.tick();
   const f=H[t.dataset.a];if(f)f(t.dataset,t);
 });
-app.addEventListener("input",e=>{if(e.target.id==="nm")newName=e.target.value;});
+app.addEventListener("input",e=>{if(e.target.id==="nm")newName=e.target.value;if(e.target.id==="xin"&&xfer){xfer.text=e.target.value;if(xfer.ready||xfer.err){xfer.ready=null;xfer.err=null;}}});
 app.addEventListener("keydown",e=>{
   if((e.key==="Enter"||e.key===" ")&&e.target.matches("[data-a][role=button]")){e.preventDefault();e.target.click();}
   if(e.key==="Enter"&&e.target.id==="nm"){e.preventDefault();H["ng-start"]();}
 });
 document.addEventListener("keydown",e=>{if(e.key==="Escape"){if(reveal){reveal=null;render();}else if(modal!=null){modal=null;render();}else if(match&&match.menu){match.menu=false;render();}}});
 
+/* ================= OFFLINE & SAVE TRANSFER ================= */
+let xfer=null;
+const b64e=u8=>{let s="";for(let i=0;i<u8.length;i+=0x8000)s+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));return btoa(s);};
+const b64d=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+async function packSave(obj){
+  const raw=new TextEncoder().encode(JSON.stringify(obj));
+  if(window.CompressionStream){try{const buf=await new Response(new Blob([raw]).stream().pipeThrough(new CompressionStream("gzip"))).arrayBuffer();return "NF1."+b64e(new Uint8Array(buf));}catch(e){}}
+  return "NF0."+b64e(raw);
+}
+async function unpackSave(code){
+  const m=/^NF([01])\.([A-Za-z0-9+/=]+)$/.exec(String(code).replace(/\s+/g,""));if(!m)throw 0;
+  let u8;try{u8=b64d(m[2]);}catch(e){throw 0;}
+  if(m[1]==="1"){if(!window.DecompressionStream)throw 1;try{u8=new Uint8Array(await new Response(new Blob([u8]).stream().pipeThrough(new DecompressionStream("gzip"))).arrayBuffer());}catch(e){throw 0;}}
+  let o;try{o=JSON.parse(new TextDecoder().decode(u8));}catch(e){throw 0;}
+  if(!o||o.k!=="ninefold"||!o.slots)throw 0;return o;
+}
+const PWA={
+  reg:null,waiting:null,reloading:false,st:null,polling:false,
+  ok:"serviceWorker" in navigator&&window.isSecureContext,
+  standalone(){return navigator.standalone===true||(window.matchMedia&&matchMedia("(display-mode: standalone)").matches);},
+  init(){
+    if(!this.ok)return;
+    navigator.serviceWorker.addEventListener("controllerchange",()=>{if(this.reloading)location.reload();});
+    // hook the registration even when the app was opened offline (register() then fails)
+    const hook=reg=>{
+      if(!reg||this.reg===reg)return;this.reg=reg;
+      if(reg.waiting&&navigator.serviceWorker.controller)this.offer(reg.waiting);
+      reg.addEventListener("updatefound",()=>{const w=reg.installing;if(!w)return;
+        w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)this.offer(w);if(w.state==="activated"&&view==="options")this.paint();});});
+    };
+    navigator.serviceWorker.register("sw.js").then(hook).catch(()=>{});
+    navigator.serviceWorker.getRegistration().then(hook).catch(()=>{});
+    const check=()=>{if(this.reg)this.reg.update().catch(()=>{});};
+    document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")check();});
+    window.addEventListener("online",check);
+    document.getElementById("updbar").addEventListener("click",()=>this.apply());
+  },
+  offer(w){this.waiting=w;this.bar();},
+  bar(){const b=document.getElementById("updbar");if(b)b.hidden=!(this.waiting&&view!=="match");},
+  apply(){
+    if(!this.waiting)return;
+    if(save&&dirty){toast("Save your game first, then tap Update",2600);return;}
+    this.reloading=true;this.waiting.postMessage("skip");
+  },
+  line(){
+    if(!this.ok)return "Offline play works on the online version of the game.";
+    const s=this.st;if(!s)return "Checking…";
+    if(s.none)return "Preparing the offline copy…";
+    const [g,gt]=s.game,[i,it]=s.images,[m,mt]=s.music;
+    const done=g>=gt&&i>=it&&m>=mt;
+    return done?`<b>Ready.</b> The game, ${it} card images and ${mt} music track${mt===1?"":"s"} are stored on this device.`
+      :`Downloading for offline play… ${i}/${it} images, ${m}/${mt} music tracks.`;
+  },
+  async paint(){
+    if(!this.ok)return;
+    const ctl=navigator.serviceWorker.controller;
+    if(!ctl){this.st={none:true};}
+    else this.st=await new Promise(res=>{const ch=new MessageChannel();const t=setTimeout(()=>res(this.st),1500);ch.port1.onmessage=e=>{clearTimeout(t);res(e.data);};ctl.postMessage("status",[ch.port2]);});
+    const el=document.getElementById("offst");if(el)el.innerHTML=this.line();
+    const s=this.st,pending=!s||s.none||s.game[0]<s.game[1]||s.images[0]<s.images[1]||s.music[0]<s.music[1];
+    if(pending&&!this.polling){this.polling=true;setTimeout(()=>{this.polling=false;if(view==="options")this.paint();},2000);}
+  }
+};
+
 /* ================= BOOT ================= */
+PWA.init();
 bootLocal();
 fx.init();applyOptions();
 render();
