@@ -121,8 +121,12 @@ h3{margin:0;font:700 1rem/1.2 var(--f-display);color:var(--gold-hi);letter-spaci
 .card.p{--artbg:radial-gradient(circle at 64% 62%,#86bcff 0%,#2a64c9 46%,#0f275a 100%)}
 .card.o{--artbg:radial-gradient(circle at 64% 62%,#ffa3b7 0%,#b42a4c 46%,#470a1e 100%)}
 .card.n{--artbg:radial-gradient(circle at 64% 62%,#9aa3d8 0%,#3e4790 50%,#151a4a 100%)}
-.card .art .pic{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:var(--pos,50% 40%);display:block}
-.card.has-pic .art::after{background:radial-gradient(75% 65% at 0% 0%,rgba(0,0,0,.72),transparent 68%)}
+.card .art .pic{position:absolute;top:0;left:0;width:100%;height:100%;background-size:cover;background-position:var(--pos,50% 40%);background-repeat:no-repeat;z-index:0}
+.card.has-pic .art{isolation:isolate}
+.card.has-pic .art::after{z-index:2;background:radial-gradient(75% 65% at 0% 0%,rgba(0,0,0,.72),transparent 68%)}
+.card.has-pic.p .art::before,.card.has-pic.o .art::before{content:"";position:absolute;top:0;right:0;bottom:0;left:0;z-index:1;pointer-events:none;mix-blend-mode:normal;border-radius:inherit}
+.card.has-pic.p .art::before{box-shadow:inset 0 0 0 4px #3d7dff;box-shadow:inset 0 0 0 3.5cqw #3d7dff;background:linear-gradient(to top,rgba(45,110,255,.66) 0%,rgba(45,110,255,.24) 40%,rgba(45,110,255,0) 66%)}
+.card.has-pic.o .art::before{box-shadow:inset 0 0 0 4px #ff4f75;box-shadow:inset 0 0 0 3.5cqw #ff4f75;background:linear-gradient(to top,rgba(235,50,90,.66) 0%,rgba(235,50,90,.24) 40%,rgba(235,50,90,0) 66%)}
 .card.has-pic .gl{display:none}
 .card.has-pic.p{box-shadow:0 0 0 2px #6fa8ff,0 0 12px rgba(111,168,255,.75),0 2px 6px rgba(0,0,0,.55)}
 .card.has-pic.o{box-shadow:0 0 0 2px #ff7f9b,0 0 12px rgba(255,127,155,.7),0 2px 6px rgba(0,0,0,.55)}
@@ -392,6 +396,15 @@ const CARD_ART={
   "Gale Sparrow": "gale-sparrow.jpeg",
   "Spine Hog": "spine-hog.jpeg",
 };
+/* Load every illustration once at start, so cards never flash when the board redraws. */
+const ART_MISSING={},ART_KEEP=[];
+Object.keys(CARD_ART).forEach(n=>{
+  const a=CARD_ART[n],f=Array.isArray(a)?a[0]:a,im=new Image();
+  im.onerror=()=>{ART_MISSING[n]=1;try{render();}catch(e){}};
+  im.src="images/cards/"+f;
+  if(im.decode)im.decode().catch(()=>{});
+  ART_KEEP.push(im);
+});
 const RAW=[
  [["Mire Toad","🐸","a"],["Burrow Rat","🐀",""],["Ember Moth","🦋","f"],["Tide Crab","🦀","a"],["Husk Beetle","🪲","e"],["Dusk Bat","🦇",""],["Bog Slug","🐌","p"],["Pale Grub","🐛",""],["Gale Sparrow","🐦","w"],["Spine Hog","🦔",""],["Fen Gnat","🦟","p"]],
  [["Cinder Hound","🐕","f"],["Frost Hare","🐇","i"],["Silk Spider","🕷️","p"],["Stone Tortoise","🐢","e"],["Spark Fly","🪰","t"],["Glade Fox","🦊",""],["Reed Viper","🐍","p"],["Gloom Owl","🦉",""],["Tusk Boar","🐗","e"],["Brine Squid","🦑","a"],["Hollow Shade","👻",""]],
@@ -764,8 +777,8 @@ function goBack(){const r=retView[view]||(save?"map":"title");go(r);}
 
 function cardHTML(cid,own,cls="",extra=""){
   const c=CARDS[cid];
-  const art=CARD_ART[c.n],pic=art?(Array.isArray(art)?art:[art]):null;
-  const img=pic?`<img class="pic" src="images/cards/${esc(pic[0])}" alt="" loading="lazy" decoding="async"${pic[1]?` style="--pos:${esc(pic[1])}"`:""} onerror="this.closest('.card').classList.remove('has-pic');this.remove()">`:"";
+  const art=!ART_MISSING[c.n]&&CARD_ART[c.n],pic=art?(Array.isArray(art)?art:[art]):null;
+  const img=pic?`<div class="pic" style="background-image:url('images/cards/${esc(pic[0])}')${pic[1]?`;--pos:${esc(pic[1])}`:""}"></div>`:"";
   return `<div class="card ${own} t${tierOf(c.lv)} ${pic?"has-pic":""} ${cls}" title="${esc(c.n)}"><div class="art">${img}<span class="gl">${c.g}</span></div>`+
     `<div class="rk"><b class="r0">${rv(c.r[0])}</b><b class="r3">${rv(c.r[3])}</b><b class="r1">${rv(c.r[1])}</b><b class="r2">${rv(c.r[2])}</b></div>`+
     (c.e?`<i class="el">${EL[c.e].g}</i>`:"")+extra+`</div>`;
