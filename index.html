@@ -598,7 +598,7 @@ function aiChoose(st,lvl,R){
 const ri=n=>Math.floor(Math.random()*n);
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const clone=o=>JSON.parse(JSON.stringify(o));
-const DEF_OPT={speed:"normal",sound:true,hints:false,confirm:false,first:"random",autosave:true,fx:true};
+const DEF_OPT={speed:"normal",music:"mid",sound:true,hints:false,confirm:false,first:"random",autosave:true,fx:true};
 const DEF_CUSTOM={diff:1,trade:"one",rules:{open:true,same:false,plus:false,wall:false,combo:true,elemental:false,random:false,sudden:false}};
 function fixMeta(){meta.options={...DEF_OPT,...(meta.options||{})};const c=meta.custom||{};meta.custom={...DEF_CUSTOM,...c,rules:{...DEF_CUSTOM.rules,...(c.rules||{})}};if(!DIFFS[meta.custom.diff])meta.custom.diff=1;if(!TRADE_INFO[meta.custom.trade])meta.custom.trade="one";}
 const SPEED={normal:1,fast:.5,instant:.15};
@@ -748,6 +748,93 @@ const sfx={
   draw(){[523,494,523].forEach((f,i)=>tone(f,i*.18,.3,"triangle",.07));}
 };
 
+/* ================= MUSIC =================
+   Tracks live in the music folder. A missing file is simply skipped:
+   boss falls back to the region track, and a region falls back to the title track. */
+const MUSIC_FILES={
+  title:"title.mp3",
+  r0:"ashgrove.mp3", r1:"port-ravel.mp3", r2:"dustmaw.mp3", r3:"frostpine.mp3",
+  r4:"aurum.mp3", r5:"shattered-isle.mp3", r6:"citadel.mp3",
+  boss:"boss.mp3", victory:"victory.mp3", defeat:"defeat.mp3"
+};
+const MUSIC_VOL={high:.55,mid:.35,low:.18,off:0};
+const Music={
+  ctx:null,cur:null,want:null,missing:{},els:{},unlocked:false,jingleFor:null,FADE:1.2,TAIL:2.5,
+  vol(){return MUSIC_VOL[opt().music]??MUSIC_VOL.mid;},
+  ensureCtx(){
+    if(this.ctx)return this.ctx;
+    try{this.ctx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){this.ctx=null;}
+    return this.ctx;
+  },
+  el(key){
+    if(this.els[key])return this.els[key];
+    const a=new Audio();a.src="music/"+MUSIC_FILES[key];a.preload="auto";a.crossOrigin="anonymous";
+    const rec={a,g:null,key,fading:false};
+    a.addEventListener("error",()=>{this.missing[key]=1;if(this.cur===rec){this.cur=null;}this.update();});
+    if(key!=="victory"&&key!=="defeat"){
+      a.addEventListener("timeupdate",()=>{
+        if(this.cur!==rec||rec.fading||!a.duration||!isFinite(a.duration))return;
+        if(a.duration-a.currentTime<this.TAIL){rec.fading=true;this.ramp(rec,0,this.TAIL*.9);}
+      });
+      a.addEventListener("ended",()=>{if(this.cur!==rec)return;rec.fading=false;a.currentTime=0;this.ramp(rec,0,0);a.play().catch(()=>{});this.ramp(rec,this.vol(),this.FADE);});
+    }
+    const c=this.ensureCtx();
+    if(c){try{const src=c.createMediaElementSource(a);rec.g=c.createGain();rec.g.gain.value=0;src.connect(rec.g);rec.g.connect(c.destination);}catch(e){rec.g=null;}}
+    if(!rec.g)a.volume=0;
+    this.els[key]=rec;return rec;
+  },
+  ramp(rec,to,secs){
+    if(rec.g&&this.ctx){const g=rec.g.gain,t=this.ctx.currentTime;g.cancelScheduledValues(t);g.setValueAtTime(g.value,t);g.linearRampToValueAtTime(to,t+Math.max(.01,secs));}
+    else{const a=rec.a,from=a.volume,start=performance.now();const step=()=>{const k=Math.min(1,(performance.now()-start)/(secs*1000||1));a.volume=Math.max(0,Math.min(1,from+(to-from)*k));if(k<1)requestAnimationFrame(step);};step();}
+  },
+  pick(){
+    // which track should be playing right now
+    let k="title";
+    if(view==="pre"&&preOpp&&OPP[preOpp])k="r"+OPP[preOpp].region;
+    if(view==="match"&&match){
+      if(match.phase==="done"&&match.result){
+        const w=match.result.winner;
+        if(this.jingleFor!==match.result){this.jingleFor=match.result;const j=w==="p"?"victory":w==="o"?"defeat":null;if(j&&!this.missing[j])return {jingle:j};}
+        k=null;
+      }else if(match.free)k="title";
+      else{k="r"+match.opp.region;if(match.opp.boss&&!this.missing.boss)k="boss";}
+    }
+    while(k&&this.missing[k])k=(k==="boss"&&match&&!match.free)?"r"+match.opp.region:(k==="title"?null:"title");
+    return {track:k};
+  },
+  update(){
+    if(!this.unlocked)return;
+    const v=this.vol();
+    if(v===0){if(this.cur){const r=this.cur;this.ramp(r,0,.4);setTimeout(()=>r.a.pause(),450);this.cur=null;}this.want=null;return;}
+    const p=this.pick();
+    if(p.jingle){this.switchTo(null,.6);const r=this.el(p.jingle);r.a.currentTime=0;this.ramp(r,0,0);r.a.play().catch(()=>{});this.ramp(r,v,.05);return;}
+    if(p.track===undefined)return;
+    if(p.track===null){if(view!=="match")this.switchTo(null,this.FADE);return;}
+    if(this.cur&&this.cur.key===p.track){if(!this.cur.fading)this.ramp(this.cur,v,.3);return;}
+    this.switchTo(p.track,this.FADE);
+  },
+  switchTo(key,secs){
+    const old=this.cur;
+    if(old){this.ramp(old,0,secs);setTimeout(()=>{if(this.cur!==old)old.a.pause();},secs*1000+80);}
+    this.cur=null;
+    if(!key)return;
+    const r=this.el(key);r.fading=false;this.cur=r;
+    if(r.a.ended||r.a.currentTime>0&&r.a.paused)r.a.currentTime=0;
+    this.ramp(r,0,0);
+    r.a.play().then(()=>{if(this.cur===r)this.ramp(r,this.vol(),secs);}).catch(()=>{});
+  },
+  unlock(){
+    const c=this.ensureCtx();if(c&&c.state==="suspended")c.resume().catch(()=>{});
+    if(!this.unlocked){this.unlocked=true;this.update();}
+  }
+};
+["pointerdown","keydown","touchend"].forEach(ev=>document.addEventListener(ev,()=>Music.unlock(),{passive:true}));
+document.addEventListener("visibilitychange",()=>{
+  if(!Music.ctx)return;
+  if(document.visibilityState==="hidden")Music.ctx.suspend().catch(()=>{});
+  else if(Music.unlocked)Music.ctx.resume().catch(()=>{});
+});
+
 /* ================= BACKGROUND LIGHTS ================= */
 const fx={c:null,ctx:null,ps:[],raf:0,on:false,d:1,
   init(){this.c=document.getElementById("fx");this.ctx=this.c.getContext("2d");window.addEventListener("resize",()=>this.size());this.size();for(let i=0;i<44;i++)this.ps.push(this.mk(true));},
@@ -862,6 +949,7 @@ function renderMenu(){
 }
 const OPTS=[
   ["speed","Animation speed","How fast cards move and flip.",[["normal","Normal"],["fast","Fast"],["instant","Instant"]]],
+  ["music","Music","Background music for the title screen, each region and boss duels.",[["high","High"],["mid","Medium"],["low","Low"],["off","Off"]]],
   ["sound","Sound effects","Chimes for placing, flipping and winning.",[[true,"On"],[false,"Off"]]],
   ["hints","Capture hints","Shows how many cards each square would capture with the selected card.",[[false,"Off"],[true,"On"]]],
   ["confirm","Confirm placement","Tap a square twice to place. Helps avoid misplays on a phone.",[[false,"Off"],[true,"On"]]],
@@ -1092,7 +1180,7 @@ function renderMatchMenu(){
    <div class="lbl">Rules in play</div><ul class="rules">${keys.map(k=>`<li><span class="chip">${RULE_INFO[k][0]}</span><span>${RULE_INFO[k][1]}</span></li>`).join("")}
    <li><span class="chip trade">${TRADE_INFO[m.trade][0].replace("Trade: ","")}</span><span>${TRADE_INFO[m.trade][1]}</span></li></ul>
    <div class="lbl">Quick options</div>
-   ${OPTS.filter(o=>["speed","sound","hints","confirm"].includes(o[0])).map(([k,n,d,ch])=>`<div class="opt"><div style="font-weight:800">${n}</div>${segHTML(k,ch)}</div>`).join("")}
+   ${OPTS.filter(o=>["speed","music","sound","hints","confirm"].includes(o[0])).map(([k,n,d,ch])=>`<div class="opt"><div style="font-weight:800">${n}</div>${segHTML(k,ch)}</div>`).join("")}
    <div class="lbl">Forfeit</div>
    ${m.forfeitArm?`<div class="sub">${m.trade==="none"?"You lose the duel. This is a friendly duel, so no cards change hands.":"You lose the duel and "+esc(m.opp.n)+" takes your strongest card in this hand."}</div><div class="row"><button class="btn danger" data-a="m-forfeit">Forfeit duel</button><button class="btn ghost" data-a="m-unarm">Keep playing</button></div>`
    :`<div class="row"><button class="btn ghost sm" data-a="m-farm" ${canForfeit?"":"disabled"}>Forfeit this duel</button>${canForfeit?"":`<span class="sub">Available on your turn.</span>`}</div>`}
@@ -1307,6 +1395,7 @@ function render(){
   }
   app.innerHTML=h+(save?renderModal()+renderReveal():"");
   fitCards();
+  Music.update();
 }
 function parseVal(v){return v==="true"?true:v==="false"?false:v;}
 const H={
