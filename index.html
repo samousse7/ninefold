@@ -707,7 +707,7 @@ const PORTRAITS=new Set(/*PORTRAITS*/["cadet-pip", "headmaster-rowan", "instruct
 const slugOf=s=>String(s).normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 // Region backgrounds for duels: images/regions/<region-name>.jpg (e.g. ashgrove-academy.jpg),
 // free-battle.jpg for Free Battle and two-player duels. Filled in by scripts/build_offline.py.
-const SCENES=new Set(/*SCENES*/[]/*END*/);
+const SCENES=new Set(/*SCENES*/["ashgrove-academy"]/*END*/);
 const Scene={cur:null,
   pick(){
     let s=null;
