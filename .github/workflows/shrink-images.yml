@@ -1,14 +1,14 @@
 name: Prepare images, music and offline files
 
 # Runs whenever game files change on main:
-# - converts PNG and WebP card images to JPEG and shrinks large ones
+# - converts PNG and WebP card images and opponent portraits to JPEG and shrinks large ones
 # - compresses music and converts WAV/M4A to MP3
 # - refreshes the offline file list in sw.js (this triggers "New version available")
 on:
   push:
     branches: [main]
     paths:
-      - "images/cards/**"
+      - "images/**"
       - "music/**"
       - "index.html"
       - "fonts/**"
@@ -46,7 +46,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A images/cards music index.html sw.js
+          git add -A images music index.html sw.js
           if git diff --cached --quiet; then
             echo "Nothing to update"
           else

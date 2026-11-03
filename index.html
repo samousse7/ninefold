@@ -237,6 +237,16 @@ h3{margin:0;font:700 1rem/1.2 var(--f-display);color:var(--gold-hi);letter-spaci
 /* ---------- pre-duel ---------- */
 .foe{display:flex;gap:14px;align-items:center}
 .foe .pt{font-size:3rem;flex:none;text-shadow:none}
+.pt.has-img{display:inline-block;flex:none;border-radius:50%;overflow:hidden;background:#05071c;vertical-align:middle;
+  box-shadow:0 0 0 2px #c9d2e6,0 0 0 3px rgba(0,0,0,.5),0 3px 10px rgba(0,0,0,.5)}
+.pt.has-img.boss{box-shadow:0 0 0 2px var(--gold),0 0 0 3px rgba(80,50,0,.6),0 0 14px rgba(255,214,110,.45),0 3px 10px rgba(0,0,0,.5)}
+.pt.has-img img{display:block;width:100%;height:100%;object-fit:cover}
+.opp .pt.has-img{width:2.9rem;height:2.9rem}
+.foe .pt.has-img{width:7.5rem;height:7.5rem;border-radius:18px}
+.who .pt.has-img{width:1.8rem;height:1.8rem;box-shadow:0 0 0 1.5px #c9d2e6}
+.who .pt.has-img.boss{box-shadow:0 0 0 1.5px var(--gold)}
+.pt.has-img.xs{width:1.6rem;height:1.6rem;box-shadow:0 0 0 1.5px #c9d2e6;margin-right:4px}
+@media (max-width:520px){.foe .pt.has-img{width:5.5rem;height:5.5rem;border-radius:14px}}
 .quote{font-style:italic;color:var(--muted);margin:2px 0 0}
 .rules{display:grid;gap:8px;margin:0;padding:0;list-style:none}
 .rules li{display:grid;grid-template-columns:7.8rem 1fr;gap:10px;align-items:start;font-size:.92rem}
@@ -685,6 +695,15 @@ const REGIONS=[
   {id:"sage",n:"The Witch of Ages",p:"⏳",ai:4,lv:[9,10],boss:1,rare:"The Witch of Ages",q:"Every card in history passes through my hands. Yours will too."}]}
 ];
 const OPP={};REGIONS.forEach((r,ri)=>r.opps.forEach(o=>{o.region=ri;if(o.rare)o.rareId=byName(o.rare);OPP[o.id]=o;}));
+// Opponent portraits: images/opponents/<name-in-lowercase-with-hyphens>.jpg
+// The list below is filled in automatically by scripts/build_offline.py.
+const PORTRAITS=new Set(/*PORTRAITS*/[]/*END*/);
+const slugOf=s=>String(s).normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+function ptHTML(o,cls=""){
+  const s=o&&o.n?slugOf(o.n):"";
+  if(s&&PORTRAITS.has(s))return `<span class="pt has-img ${o.boss?"boss":""} ${cls}"><img src="images/opponents/${s}.jpg" alt=""></span>`;
+  return `<span class="pt ${cls}">${o?o.p:""}</span>`;
+}
 
 /* ================= ENGINE ================= */
 const NBT=[];for(let i=0;i<9;i++)NBT.push([i>=3?i-3:-1,i%3<2?i+1:-1,i<6?i+3:-1,i%3>0?i-1:-1]);
@@ -1175,7 +1194,7 @@ function renderRecords(){
    <div class="win"><p class="win-t">Collection</p><div class="recs"><div><b>${tierCount(1)}</b><span>Monsters</span></div><div><b>${tierCount(2)}</b><span>Elite monsters</span></div><div><b>${tierCount(3)}</b><span>Summons</span></div><div><b>${tierCount(4)}</b><span>Legends</span></div></div>
    ${fav?`<div class="sub" style="margin-top:10px">Most defeated: ${esc(OPP[fav[0]].n)} (${fav[1]} times)</div>`:""}</div>
    <div class="win"><p class="win-t">Rare cards ${rares.filter(o=>s.col[o.rareId]).length}/${rares.length}</p><div class="stack" style="gap:6px">
-   ${rares.map(o=>{const have=s.col[o.rareId]>0,seen=s.seen[o.rareId];return `<div class="row" style="justify-content:space-between"><span>${o.p} ${esc(o.n)}</span><span class="${have?"won":"sub"}">${have?esc(o.rare):seen?esc(o.rare)+" (not owned)":"Unknown"}</span></div>`;}).join("")}</div></div>
+   ${rares.map(o=>{const have=s.col[o.rareId]>0,seen=s.seen[o.rareId];return `<div class="row" style="justify-content:space-between"><span>${ptHTML(o,"xs")} ${esc(o.n)}</span><span class="${have?"won":"sub"}">${have?esc(o.rare):seen?esc(o.rare)+" (not owned)":"Unknown"}</span></div>`;}).join("")}</div></div>
    <div class="row"><button class="btn ghost" data-a="back">Back</button></div></div>`;
 }
 
@@ -1197,7 +1216,7 @@ function renderMap(){
       h+=`<div class="opps">`+r.opps.map(o=>{
         const b=save.beaten[o.id]||0;
         let hold="";if(o.rareId!=null){hold=save.col[o.rareId]?` · You hold their ${esc(o.rare)}`:(save.seen[o.rareId]?` · Guards ${esc(o.rare)}`:(o.boss?" · Guards a rare card":" · Carries a rare card"));}
-        return `<div class="opp"><span class="pt">${o.p}</span><div class="oi"><div class="on">${esc(o.n)}${o.boss?`<span class="boss">Boss</span>`:""}</div>
+        return `<div class="opp">${ptHTML(o)}<div class="oi"><div class="on">${esc(o.n)}${o.boss?`<span class="boss">Boss</span>`:""}</div>
         <div class="od"><span class="pips">${pips(o.ai)}</span> ${DIFF[o.ai]} · Lv ${o.lv[0]}${o.lv[1]!==o.lv[0]?" to "+o.lv[1]:""}${b?` · <span class="won">Won ${b}</span>`:""}${hold}</div></div>
         <button class="btn sm" data-a="duel" data-o="${o.id}">Duel</button></div>`;}).join("")+`</div>`;
     }
@@ -1212,7 +1231,7 @@ function renderPre(){
   const o=OPP[preOpp],r=REGIONS[o.region],R=rulesOf(r);
   if(!deckValid(save.deck,save.col))save.deck=autoDeck(save.col);
   const keys=Object.keys(RULE_INFO).filter(k=>R[k]);
-  return header("map")+`<div class="win stack"><div class="foe"><span class="pt">${o.p}</span><div><div class="lbl">${esc(r.name)}${o.boss?" · Boss":""}</div><h2 class="ttl">${esc(o.n)}</h2><p class="quote">"${esc(o.q)}"</p>
+  return header("map")+`<div class="win stack"><div class="foe">${ptHTML(o)}<div><div class="lbl">${esc(r.name)}${o.boss?" · Boss":""}</div><h2 class="ttl">${esc(o.n)}</h2><p class="quote">"${esc(o.q)}"</p>
    <div class="od"><span class="pips">${pips(o.ai)}</span> ${DIFF[o.ai]} · Plays level ${o.lv[0]} to ${o.lv[1]} cards</div></div></div>
    <ul class="rules">${keys.map(k=>`<li><span class="chip">${RULE_INFO[k][0]}</span><span>${RULE_INFO[k][1]}</span></li>`).join("")}
    <li><span class="chip trade">${TRADE_INFO[r.trade][0].replace("Trade: ","")}</span><span>${TRADE_INFO[r.trade][1]}</span></li></ul>
@@ -1254,7 +1273,7 @@ function renderFree(){
   }
   return header("battle")+`<div class="stack">
   <div class="win stack"><p class="win-t" style="margin:0">Free Battle</p>${modeSeg}<div class="sub">Set your own difficulty and rules. Harder opponents carry higher level cards, so they are worth more to beat.</div>
-   <div class="foe"><span class="pt">${freeOpp.p}</span><div style="flex:1;min-width:0"><div class="lbl">Your opponent</div><h2 class="ttl">${esc(freeOpp.n)}</h2><p class="quote">"${esc(freeOpp.q)}"</p></div></div>
+   <div class="foe">${ptHTML(freeOpp)}<div style="flex:1;min-width:0"><div class="lbl">Your opponent</div><h2 class="ttl">${esc(freeOpp.n)}</h2><p class="quote">"${esc(freeOpp.q)}"</p></div></div>
    <div class="row"><button class="btn ghost sm" data-a="free-roll">Find another opponent</button></div></div>
   <div class="win stack"><p class="win-t" style="margin:0">Difficulty</p>
    <div class="diffs">${DIFFS.map((x,i)=>`<button class="dif ${c.diff===i?"on":""}" data-a="free-diff" data-i="${i}" aria-pressed="${c.diff===i}"><b>${x.n}</b><span class="pips">${pips(x.ai)}</span><span class="d">Lv ${x.lv[0]} to ${x.lv[1]} cards</span></button>`).join("")}</div>
@@ -1397,7 +1416,7 @@ function renderMatch(){
   else status=m.two?`<b>${esc(me==="p"?save.name:m.opp.n)}</b>'s turn. Pick a card from your hand.`:"Your turn. Pick a card from your hand.";
   let h=`<div class="mtop"><span class="brand">${brand}</span><div class="where">${esc(m.region.name)}${m.round>1?` · Sudden Death round ${m.round}`:""}</div>${has("rewind")&&!m.two&&!m.rewound&&m.hist&&myTurn?`<button class="mbtn" data-a="rewind">Rewind</button>`:""}<button class="mbtn" data-a="m-menu">Menu</button></div>
   <div class="match">
-   <div class="side o ${st.turn==="o"&&m.phase==="play"?"active":""}"><div class="who"><span class="dot"></span><span class="pt">${m.opp.p}</span><span class="nm">${esc(m.opp.n)}</span><span class="sc">${score(st,"o")}</span></div><div class="hand">${oHand}</div></div>
+   <div class="side o ${st.turn==="o"&&m.phase==="play"?"active":""}"><div class="who"><span class="dot"></span>${m.two?`<span class="pt">${m.opp.p}</span>`:ptHTML(m.opp)}<span class="nm">${esc(m.opp.n)}</span><span class="sc">${score(st,"o")}</span></div><div class="hand">${oHand}</div></div>
    <div class="mid"><div class="mrules">${chips}</div><div class="board-wrap"><div class="board">${cells}</div><div class="banner" id="banner"></div></div><div class="status">${status}</div></div>
    <div class="side p ${st.turn==="p"&&m.phase==="play"?"active":""}"><div class="who"><span class="dot"></span><span class="pt">🛡️</span><span class="nm">${esc(save.name)}</span><span class="sc">${score(st,"p")}</span></div><div class="hand">${pHand}</div></div>
   </div>`;
