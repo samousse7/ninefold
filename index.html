@@ -697,7 +697,7 @@ const REGIONS=[
 const OPP={};REGIONS.forEach((r,ri)=>r.opps.forEach(o=>{o.region=ri;if(o.rare)o.rareId=byName(o.rare);OPP[o.id]=o;}));
 // Opponent portraits: images/opponents/<name-in-lowercase-with-hyphens>.jpg
 // The list below is filled in automatically by scripts/build_offline.py.
-const PORTRAITS=new Set(/*PORTRAITS*/[]/*END*/);
+const PORTRAITS=new Set(/*PORTRAITS*/["cadet-pip", "headmaster-rowan", "instructor-tobin", "librarian-marla"]/*END*/);
 const slugOf=s=>String(s).normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 function ptHTML(o,cls=""){
   const s=o&&o.n?slugOf(o.n):"";
