@@ -328,6 +328,43 @@ h3{margin:0;font:700 1rem/1.2 var(--f-display);color:var(--gold-hi);letter-spaci
 .tabs small{font-weight:500;opacity:.8}
 .detail{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center}
 .detail .card{width:150px}
+.dialog.big{width:min(100%,940px)}
+.bigview{display:grid;gap:16px 22px;justify-items:center}
+.bigview .binfo{width:100%;display:grid;gap:10px;align-content:center}
+.bigart{--r:1.333;--h:58vh;position:relative;container-type:inline-size;width:calc(var(--h) / var(--r));max-width:100%;margin:0 auto;aspect-ratio:1/var(--r);
+  box-sizing:border-box;border-radius:16px;padding:2.2%;background:linear-gradient(145deg,#f4f7fb,#9aa3b2 45%,#e9eef5 60%,#6b7383);
+  box-shadow:0 10px 34px rgba(0,0,0,.6);cursor:zoom-in;-webkit-user-select:none;user-select:none}
+@supports (height:1svh){.bigart{--h:58svh}}
+.bigart.bf2{padding:2.8%;background:linear-gradient(145deg,#fff2b8,#e0ac48 30%,#8a5a18 52%,#e9c262 76%,#fff0b0)}
+.bigart.bf3,.bigart.bf4{padding:3.4%;background:linear-gradient(145deg,#fff6cc,#e8b85a 28%,#8a5a18 50%,#f0cc6c 72%,#fff3b8);
+  box-shadow:0 0 0 1.5px rgba(255,236,170,.85),0 0 30px rgba(255,214,110,.55),0 10px 34px rgba(0,0,0,.6)}
+.bigart .bi{position:relative;width:100%;height:100%;border-radius:11px;overflow:hidden;background:#05071c;box-shadow:inset 0 0 0 1px rgba(0,0,0,.5)}
+.bigart.bf3 .bi,.bigart.bf4 .bi{box-shadow:0 0 0 1.5px rgba(255,248,215,.9),0 0 0 3px rgba(110,70,10,.55)}
+.bigart img{display:block;width:100%;height:100%;object-fit:cover}
+.bigart .bi::after{content:"";position:absolute;top:0;right:0;bottom:0;left:0;pointer-events:none;
+  background:radial-gradient(60% 40% at 0% 0%,rgba(0,0,0,.7),transparent 70%),linear-gradient(transparent 76%,rgba(0,0,0,.72));transition:opacity .25s}
+.bigart .bsh{position:absolute;top:0;right:0;bottom:0;left:0;border-radius:inherit;pointer-events:none}
+.bigart.bf3 .bsh,.bigart.bf4 .bsh{background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.34) 48%,rgba(255,240,200,.2) 53%,transparent 62%);background-size:260% 100%;background-position:130% 0;mix-blend-mode:screen}
+.bigart.bf4 .bsh{background-image:linear-gradient(115deg,transparent 36%,rgba(255,170,230,.28) 44%,rgba(170,220,255,.3) 50%,rgba(200,255,210,.26) 56%,transparent 64%)}
+@media (prefers-reduced-motion:no-preference){.bigart.bf3 .bsh,.bigart.bf4 .bsh{animation:holo 6s ease-in-out infinite}}
+.bigart .brk{position:absolute;left:6%;top:5%;width:30%;height:26%;font:800 11cqw/1 var(--f-body);color:#fff;transition:opacity .25s;
+  text-shadow:0 0 4px #000,1.5px 1.5px 0 #000,-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000}
+.bigart .brk b{position:absolute;width:34%;text-align:center}
+.bigart .r0{left:33%;top:0}.bigart .r3{left:0;top:34%}.bigart .r1{left:66%;top:34%}.bigart .r2{left:33%;bottom:0}
+.bigart .bel{position:absolute;top:6%;right:7.5%;font-size:9cqw;font-style:normal;line-height:1;filter:drop-shadow(0 1px 2px #000);transition:opacity .25s}
+.bigart .bnm{position:absolute;left:6%;right:6%;bottom:5.5%;text-align:center;font:700 7cqw/1.1 var(--f-display);letter-spacing:.05em;color:var(--gold-hi);
+  text-shadow:0 0 6px #000,1px 1px 0 #000;transition:opacity .25s}
+.bigart.clean{cursor:zoom-out}
+.bigart.clean .brk,.bigart.clean .bel,.bigart.clean .bnm,.bigart.clean .bi::after{opacity:0}
+.bigcard{width:300px;max-width:100%;margin:0 auto}
+.bigview .bwrap{width:100%;max-width:calc(100vw - 64px)}
+.bigview .hint{font-size:.78rem;color:var(--dim);text-align:center;margin-top:-8px}
+@media (min-width:760px) and (min-aspect-ratio:1/1){
+  .bigview{grid-template-columns:auto minmax(240px,1fr);align-items:center}
+  .bigview .bwrap{width:auto}
+  .bigart{--h:76vh}
+  @supports (height:1svh){.bigart{--h:76svh}}
+}
 .kv{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;font-size:.9rem;margin-top:8px;font-variant-numeric:tabular-nums}
 .kv span{color:var(--muted)}
 @media (max-width:420px){.detail{grid-template-columns:1fr;justify-items:center;text-align:center}.kv{justify-content:center}}
@@ -526,10 +563,11 @@ const CARD_ART={
   "Void Spawn": "void-spawn.jpeg",
 };
 /* Load every illustration once at start, so cards never flash when the board redraws. */
-const ART_MISSING={},ART_KEEP=[];
+const ART_MISSING={},ART_KEEP=[],ART_RATIO={};
 Object.keys(CARD_ART).forEach(n=>{
   const a=CARD_ART[n],f=Array.isArray(a)?a[0]:a,im=new Image();
   im.onerror=()=>{ART_MISSING[n]=1;try{render();}catch(e){}};
+  im.onload=()=>{if(im.naturalWidth)ART_RATIO[n]=im.naturalHeight/im.naturalWidth;};
   im.src="images/cards/"+f;
   if(im.decode)im.decode().catch(()=>{});
   ART_KEEP.push(im);
@@ -982,7 +1020,7 @@ function applyOptions(){document.documentElement.style.setProperty("--spd",Strin
 
 /* ================= UI STATE ================= */
 const app=document.getElementById("app");
-let view="title",freeOpp=null,lastCfg=null,retView={},preOpp=null,match=null,deckDraft=null,deckFilter=0,albumLv=1,modal=null,toastT=0;
+let view="title",freeOpp=null,lastCfg=null,retView={},preOpp=null,match=null,deckDraft=null,deckFilter=0,albumLv=1,modal=null,bigClean=false,toastT=0;
 let arm=null,newName="",newSlot=0;
 let reveal=null,shopTab="packs",sellArm=null,catLv=1,catMissing=true;
 function toast(msg,ms=1900){const t=document.getElementById("toast");t.textContent=msg;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,ms);}
@@ -1268,12 +1306,22 @@ function renderAlbum(){
 function renderModal(){
   if(modal==null)return "";
   const c=CARDS[modal],n=save.col[c.id]||0,where=Object.values(OPP).find(o=>o.rareId===c.id);
-  return `<div class="overlay" data-a="close"><div class="win dialog" data-stop="1"><div class="detail">${cardHTML(c.id,"n")}<div><div class="lbl">Level ${c.lv} · ${TIER[tierOf(c.lv)]}</div><h2 class="ttl">${esc(c.n)}</h2>
+  return `<div class="overlay" data-a="close"><div class="win dialog big" data-stop="1"><div class="bigview">${bigArtHTML(c)}<div class="binfo"><div><div class="lbl">Level ${c.lv} · ${TIER[tierOf(c.lv)]}</div><h2 class="ttl">${esc(c.n)}</h2>
   <div class="kv"><span>Top</span><b>${rv(c.r[0])}</b><span>Right</span><b>${rv(c.r[1])}</b><span>Bottom</span><b>${rv(c.r[2])}</b><span>Left</span><b>${rv(c.r[3])}</b><span>Element</span><b>${c.e?EL[c.e].n:"None"}</b><span>Owned</span><b>${n}</b></div>
-  ${where?`<div class="sub" style="margin-top:8px">Rare card carried by ${esc(where.n)}.</div>`:""}</div></div>
+  ${where?`<div class="sub" style="margin-top:8px">Rare card carried by ${esc(where.n)}.</div>`:""}</div>
   ${n>0&&c.lv<10?(has("refine")?`<div class="refine"><button class="btn sm" data-a="refine" data-c="${c.id}" ${n>=3&&totalCards(save.col)>=7?"":"disabled"}>Refine 3 into a level ${c.lv+1} card</button><span class="sub">${n<3?"Needs 3 copies. You have "+n+".":totalCards(save.col)<7?"You need at least 7 cards to refine.":"Three copies fuse into one random card a level higher."}</span></div>`:`<div class="sub">Card Refine unlocks at level 10. It fuses three copies into a stronger card.</div>`):""}
   ${n>0?`<div class="sub">Sells for ${fmtG(sellPrice(c.lv))} in the Shop.</div>`:(where?"":catOpen(c.lv)?`<div class="refine"><button class="btn sm" data-a="album-buy" data-c="${c.id}">Buy in the Catalogue · ${fmtG(catPrice(c.lv))}</button></div>`:`<div class="sub">Level ${c.lv} cards open in the Catalogue at player level ${CAT_UNLOCK[c.lv]}.</div>`)}
-  <button class="btn ghost" data-a="close">Close</button></div></div>`;
+  <div class="row"><button class="btn ghost" data-a="close">Close</button></div></div></div></div></div>`;
+}
+function bigArtHTML(c){
+  const art=!ART_MISSING[c.n]&&CARD_ART[c.n],pic=art?(Array.isArray(art)?art:[art]):null;
+  if(!pic)return `<div class="bwrap"><div class="bigcard">${cardHTML(c.id,"n")}</div></div>`;
+  const fr=c.lv<=4?1:c.lv<=7?2:c.lv<=9?3:4,r=ART_RATIO[c.n]||1.333;
+  return `<div class="bwrap"><div class="bigart bf${fr} ${bigClean?"clean":""}" style="--r:${r.toFixed(3)}" data-a="big-clean" role="button" tabindex="0" aria-label="Show the illustration without numbers">
+    <div class="bi"><img src="images/cards/${esc(pic[0])}" alt="${esc(c.n)}"></div><span class="bsh"></span>
+    <div class="brk"><b class="r0">${rv(c.r[0])}</b><b class="r3">${rv(c.r[3])}</b><b class="r1">${rv(c.r[1])}</b><b class="r2">${rv(c.r[2])}</b></div>
+    ${c.e?`<i class="bel">${EL[c.e].g}</i>`:""}<div class="bnm">${esc(c.n)}</div></div>
+    <div class="hint" style="margin-top:8px">Tap the picture to ${bigClean?"show the numbers":"hide the numbers"}</div></div>`;
 }
 
 /* ---------- MATCH ---------- */
@@ -1665,8 +1713,9 @@ const H={
   "deck-f"(d){deckFilter=+d.l;render();},
   "deck-done"(){if(deckDraft.length!==5)return;save.deck=deckDraft.slice();autosave();toast("Hand saved");const r=deckReturn;deckDraft=null;go(r);},
   "album-lv"(d){albumLv=+d.l;render();},
-  info(d){modal=+d.c;render();},
+  info(d){modal=+d.c;bigClean=false;render();},
   close(){modal=null;render();},
+  "big-clean"(d,t){bigClean=!bigClean;t.classList.toggle("clean",bigClean);const hn=t.parentNode.querySelector(".hint");if(hn)hn.textContent="Tap the picture to "+(bigClean?"show":"hide")+" the numbers";},
   hand(d){const m=match;if(!m||m.phase!=="play"||m.busy||m.menu||m.handoff)return;const side=d.s||"p";if(m.st.turn!==side||(side==="o"&&!m.two))return;const k=+d.k;m.sel=m.sel===k?null:k;m.pend=null;sfx.select();render();},
   cell(d){const m=match;if(!m||m.phase!=="play"||m.busy||m.menu||m.handoff||(m.st.turn!=="p"&&!m.two))return;const i=+d.i;if(m.st.board[i])return;
     if(m.sel==null){toast("Pick a card from your hand first");return;}
