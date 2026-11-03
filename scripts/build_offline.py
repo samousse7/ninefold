@@ -3,7 +3,8 @@
 1. Music: compresses MP3s that are larger than needed (about 40% smaller,
    no audible difference on a tablet) and converts WAV/M4A/FLAC/OGG to MP3.
    Already-compressed files are left alone, so running it twice changes nothing.
-2. Offline list: writes the list of game files, with a fingerprint of each,
+2. Portraits: lists the opponent portraits in images/opponents in index.html.
+3. Offline list: writes the list of game files, with a fingerprint of each,
    into sw.js. Any change to a file gives sw.js a new version, which makes the
    game show "New version available" to players.
 """
@@ -50,13 +51,25 @@ def asset_list():
     files = [ROOT / "index.html", ROOT / "manifest.webmanifest"]
     files += sorted((ROOT / "icons").glob("*.png"))
     files += sorted((ROOT / "fonts").glob("*.woff2"))
-    files += sorted(p for p in (ROOT / "images" / "cards").glob("*") if p.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp"})
+    for folder in ("cards", "opponents"):
+        files += sorted(p for p in (ROOT / "images" / folder).glob("*") if p.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp"})
     files += sorted(MUSIC.glob("*.mp3"))
     table = {}
     for f in files:
         if f.is_file():
             table[f.relative_to(ROOT).as_posix()] = hashlib.sha1(f.read_bytes()).hexdigest()[:10]
     return table
+
+
+def write_portraits():
+    """Tell the game which opponent portraits exist (images/opponents/*.jpg)."""
+    game = ROOT / "index.html"
+    names = sorted(p.stem for p in (ROOT / "images" / "opponents").glob("*.jpg"))
+    text = game.read_text(encoding="utf-8")
+    new = re.sub(r"/\*PORTRAITS\*/.*?/\*END\*/", lambda m: "/*PORTRAITS*/" + json.dumps(names) + "/*END*/", text, flags=re.S)
+    if new != text:
+        game.write_text(new, encoding="utf-8")
+        print(f"index.html updated: {len(names)} opponent portrait(s)")
 
 
 def write_sw(table):
@@ -73,4 +86,5 @@ def write_sw(table):
 
 
 compress_music()
+write_portraits()
 write_sw(asset_list())
