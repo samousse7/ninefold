@@ -5,9 +5,9 @@
    A new list means a new version: the game then shows "New version available". */
 
 /*ASSETS*/
-const VERSION = "c0a147f6cc";
+const VERSION = "5b54eabefe";
 const ASSETS = {
-  "index.html": "75b30880e5",
+  "index.html": "151e06ffb1",
   "manifest.webmanifest": "0f389e690a",
   "icons/apple-touch-icon.png": "049c5cd7fc",
   "icons/icon-192.png": "4aab68718b",
@@ -118,13 +118,20 @@ const ASSETS = {
   "images/opponents/headmaster-rowan.jpg": "92ff056c55",
   "images/opponents/instructor-tobin.jpg": "a5930d86c6",
   "images/opponents/librarian-marla.jpg": "8b23146f40",
+  "images/regions/ashgrove-academy-boss.jpg": "1312e42d65",
   "images/regions/ashgrove-academy.jpg": "7b3d4db10c",
+  "images/regions/aurum-the-floating-city-boss.jpg": "a0b8209076",
   "images/regions/aurum-the-floating-city.jpg": "f485cf0190",
+  "images/regions/dustmaw-prison-boss.jpg": "e8059f48f6",
   "images/regions/dustmaw-prison.jpg": "99948225a3",
   "images/regions/free-battle.jpg": "38a54fc080",
+  "images/regions/frostpine-monastery-boss.jpg": "7a40dab928",
   "images/regions/frostpine-monastery.jpg": "830081169c",
+  "images/regions/port-ravel-boss.jpg": "e8bc11d5e8",
   "images/regions/port-ravel.jpg": "d816e2ff08",
+  "images/regions/the-citadel-of-ages-boss.jpg": "64217f7835",
   "images/regions/the-citadel-of-ages.jpg": "3afe9a06a0",
+  "images/regions/the-shattered-isle-boss.jpg": "61b8d64275",
   "images/regions/the-shattered-isle.jpg": "ea083be844",
   "music/ashgrove.mp3": "cb053b4681",
   "music/port-ravel.mp3": "a93278ddc2",
