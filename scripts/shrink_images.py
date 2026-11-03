@@ -58,14 +58,11 @@ if renamed and GAME.exists():
 
 print(f"{changed} image(s) processed")
 
-# ---- Opponent portraits (images/opponents) ----
-# Any name works ("Cadet Pip.png", "cadet_pip.jpeg"...): each file becomes
-# a square-friendly JPEG named in lowercase with hyphens, e.g. cadet-pip.jpg,
+# ---- Opponent portraits (images/opponents) and region backgrounds (images/regions) ----
+# Any name works ("Cadet Pip.png", "Ashgrove_Academy.jpeg"...): each file becomes
+# a JPEG named in lowercase with hyphens (cadet-pip.jpg, ashgrove-academy.jpg),
 # which is the name the game looks for.
 import unicodedata
-
-PORTRAITS = ROOT / "images" / "opponents"
-PORTRAIT_MAX = 512
 
 
 def slug(name):
@@ -74,19 +71,20 @@ def slug(name):
     return re.sub(r"[^a-z0-9]+", "-", s).strip("-")
 
 
-done = 0
-if PORTRAITS.exists():
-    for path in sorted(PORTRAITS.glob("*")):
-        ext = path.suffix.lower()
-        if ext not in EXTS:
+def prepare(folder, max_width, quality, label):
+    done = 0
+    if not folder.exists():
+        return
+    for path in sorted(folder.glob("*")):
+        if path.suffix.lower() not in EXTS:
             continue
-        target = PORTRAITS / (slug(path.stem) + ".jpg")
+        target = folder / (slug(path.stem) + ".jpg")
         with Image.open(path) as im:
             im = ImageOps.exif_transpose(im)
-            if target == path and im.width <= PORTRAIT_MAX:
+            if target == path and im.width <= max_width:
                 continue
-            if im.width > PORTRAIT_MAX:
-                im = im.resize((PORTRAIT_MAX, round(im.height * PORTRAIT_MAX / im.width)), Image.LANCZOS)
+            if im.width > max_width:
+                im = im.resize((max_width, round(im.height * max_width / im.width)), Image.LANCZOS)
             if im.mode in ("RGBA", "LA", "P"):
                 im = im.convert("RGBA")
                 bg = Image.new("RGB", im.size, (0, 0, 0))
@@ -94,9 +92,13 @@ if PORTRAITS.exists():
                 im = bg
             else:
                 im = im.convert("RGB")
-            im.save(target if target != path else path, "JPEG", quality=84, optimize=True, progressive=True)
+            im.save(target, "JPEG", quality=quality, optimize=True, progressive=True)
         if target != path:
             path.unlink()
         done += 1
-        print(f"portrait {path.name} -> {target.name}")
-print(f"{done} portrait(s) processed")
+        print(f"{label} {path.name} -> {target.name}")
+    print(f"{done} {label}(s) processed")
+
+
+prepare(ROOT / "images" / "opponents", 512, 84, "portrait")
+prepare(ROOT / "images" / "regions", 1600, 80, "background")
