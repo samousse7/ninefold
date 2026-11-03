@@ -64,6 +64,29 @@ body{
   background:radial-gradient(70% 60% at 50% 50%,rgba(3,5,26,.5),rgba(3,5,26,.2) 75%),linear-gradient(180deg,rgba(3,5,26,.55),rgba(3,5,26,.15) 30%,rgba(3,5,26,.15) 70%,rgba(3,5,26,.6))}
 #scene.on{opacity:1}
 body.scened .who,body.scened .status,body.scened .mrules,body.scened .mtop .where{text-shadow:0 1px 3px #000,0 0 8px rgba(0,0,0,.8)}
+
+/* Region boards: each region's duels are played on its own material */
+.board[class*=" b-"]{--bedge:#e9cf98;--bline:#b48a4e;--bink:#2a1a0c;--cell:rgba(255,236,200,.05);--cedge:rgba(255,226,170,.18);
+  border-color:var(--bedge);box-shadow:inset 0 0 0 2px var(--bink),inset 0 0 0 3px var(--bline),inset 0 0 40px rgba(0,0,0,.55),0 12px 34px rgba(0,0,0,.55)}
+.board[class*=" b-"] .cell{background:var(--cell);border-color:var(--cedge)}
+.board.b-ashgrove-academy{background:repeating-linear-gradient(92deg,rgba(255,220,170,.035) 0 3px,transparent 3px 11px),radial-gradient(circle at 50% 35%,#6b4a2b,#3b2717 80%)}
+.board.b-port-ravel{--bedge:#d9b46a;--bline:#7c6a4a;--bink:#141a1d;--cell:rgba(210,235,240,.05);--cedge:rgba(200,230,235,.18);
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.28) 0 2px,transparent 2px 26px),repeating-linear-gradient(90deg,rgba(255,255,255,.02) 0 2px,transparent 2px 9px),radial-gradient(circle at 50% 35%,#566468,#262f33 82%)}
+.board.b-dustmaw-prison{--bedge:#e6c88f;--bline:#9a7440;--bink:#2a1a08;--cell:rgba(255,230,180,.05);--cedge:rgba(255,220,160,.2);
+  background:radial-gradient(rgba(255,230,190,.05) 1px,transparent 1.5px) 0 0/7px 7px,radial-gradient(circle at 50% 35%,#8a6a42,#4a3520 82%)}
+.board.b-frostpine-monastery{--bedge:#e4f2fc;--bline:#7f9ab5;--bink:#0e1724;--cell:rgba(220,240,255,.06);--cedge:rgba(210,235,255,.22);
+  background:linear-gradient(135deg,rgba(255,255,255,.06),transparent 40%,rgba(255,255,255,.04) 60%,transparent),radial-gradient(circle at 50% 30%,#4a607a,#1c2738 82%)}
+.board.b-aurum-the-floating-city{--bedge:#f6d98a;--bline:#a8812f;--bink:#120c1c;--cell:rgba(255,235,190,.045);--cedge:rgba(246,217,138,.22);
+  background:linear-gradient(118deg,transparent 30%,rgba(240,207,120,.12) 31%,transparent 33%,transparent 62%,rgba(240,207,120,.08) 63%,transparent 64.5%),radial-gradient(circle at 50% 35%,#3a2e4c,#17111f 82%)}
+.board.b-the-shattered-isle{--bedge:#a9dccd;--bline:#4f7d74;--bink:#081314;--cell:rgba(190,240,225,.05);--cedge:rgba(170,225,210,.2);
+  background:linear-gradient(155deg,transparent 46%,rgba(0,0,0,.35) 47%,transparent 48.5%),linear-gradient(35deg,transparent 60%,rgba(0,0,0,.3) 61%,transparent 62.5%),radial-gradient(circle at 50% 35%,#2b4b4b,#0f2022 82%)}
+.board.b-the-citadel-of-ages{--bedge:#d6c8ff;--bline:#7a64c4;--bink:#0d0820;--cell:rgba(220,210,255,.05);--cedge:rgba(210,195,255,.22);
+  background:radial-gradient(rgba(255,255,255,.5) .6px,transparent 1px) 0 0/23px 23px,radial-gradient(rgba(200,190,255,.35) .6px,transparent 1px) 11px 13px/31px 31px,radial-gradient(circle at 50% 35%,#33275e,#120b2a 82%)}
+.board.b-boss{box-shadow:inset 0 0 0 2px var(--bink,#070c3c),inset 0 0 0 3px #f0cf78,inset 0 0 40px rgba(0,0,0,.55),0 0 26px rgba(255,190,90,.38),0 12px 34px rgba(0,0,0,.55)}
+#scene.boss{filter:brightness(.62) saturate(1.25) sepia(.25) hue-rotate(-12deg) contrast(1.1)}
+#scene.boss::after{background:radial-gradient(60% 55% at 50% 50%,rgba(20,5,0,.35),rgba(10,2,0,.75) 80%)}
+#scene.boss.own{filter:none}
+#scene.boss.own::after{background:radial-gradient(70% 60% at 50% 50%,rgba(3,5,26,.5),rgba(3,5,26,.25) 75%),linear-gradient(180deg,rgba(3,5,26,.6),rgba(3,5,26,.2) 30%,rgba(3,5,26,.2) 70%,rgba(3,5,26,.65))}
 #fx{position:fixed;top:0;right:0;bottom:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
 #app{position:relative;z-index:1;max-width:980px;margin:0 auto}
 button{font:inherit;color:inherit;cursor:pointer}
@@ -224,6 +247,11 @@ h3{margin:0;font:700 1rem/1.2 var(--f-display);color:var(--gold-hi);letter-spaci
 .bar i{display:block;height:100%;background:linear-gradient(90deg,#3a6ad8,var(--crystal))}
 .regions{display:grid;gap:16px}
 .region{display:grid;gap:10px}
+.region.has-bg{position:relative;overflow:hidden}
+.region .rbg{position:absolute;top:0;left:0;right:0;height:190px;background:center 45%/cover no-repeat;opacity:.55;pointer-events:none;
+  -webkit-mask-image:linear-gradient(#000,#000 35%,transparent);mask-image:linear-gradient(#000,#000 35%,transparent)}
+.region.has-bg>*:not(.rbg){position:relative;z-index:1}
+.region.has-bg .rh h2,.region.has-bg .rh p{text-shadow:0 1px 3px #000,0 0 10px rgba(0,0,0,.7)}
 .region.locked{filter:saturate(.35) brightness(.75)}
 .rh{display:flex;gap:12px;align-items:baseline}
 .rn{font:700 1.6rem/1 var(--f-display);color:var(--gold);min-width:2.3ch}
@@ -310,7 +338,9 @@ h3{margin:0;font:700 1rem/1.2 var(--f-display);color:var(--gold-hi);letter-spaci
   .side.o .hand .card.sel{transform:translateX(14%)}
   .hand .card.can:hover{transform:translateX(-7%)}
   .board-wrap{width:min(100%,clamp(300px,calc((100vh - 170px) * .9),500px))}
-  .who{flex-wrap:wrap}
+  .who{flex-wrap:wrap;row-gap:2px}
+  .who .nm{flex:1 1 0;min-width:0;white-space:normal;line-height:1.1;font-size:.85rem}
+  .who .sc{flex-basis:100%;text-align:right}
 }
 
 /* ---------- overlay ---------- */
@@ -716,8 +746,11 @@ const Scene={cur:null,
     return s&&SCENES.has(s)?s:null;
   },
   update(){
-    const s=this.pick(),el=document.getElementById("scene");if(!el)return;
+    let s=this.pick();const el=document.getElementById("scene");if(!el)return;
+    const boss=!!(s&&view==="match"&&match&&!match.free&&match.opp&&match.opp.boss),own=boss&&SCENES.has(s+"-boss");
+    if(own)s=s+"-boss";
     document.body.classList.toggle("scened",!!s);
+    el.classList.toggle("boss",boss);el.classList.toggle("own",own);
     if(s===this.cur)return;this.cur=s;
     if(s){el.style.backgroundImage=`url('images/regions/${s}.jpg')`;requestAnimationFrame(()=>el.classList.add("on"));}
     else el.classList.remove("on");
@@ -1233,7 +1266,8 @@ function renderMap(){
   <div class="regions">`;
   REGIONS.forEach((r,i)=>{
     const locked=i>=save.unlocked;
-    h+=`<article class="win region ${locked?"locked":""}"><div class="rh"><span class="rn">${["I","II","III","IV","V","VI","VII"][i]}</span><div><h2>${esc(r.name)}</h2><p>${esc(r.blurb)}</p></div></div>
+    const rs=slugOf(r.name),rb=!locked&&SCENES.has(rs)?`<div class="rbg" style="background-image:url('images/regions/${rs}.jpg')"></div>`:"";
+    h+=`<article class="win region ${locked?"locked":""} ${rb?"has-bg":""}">${rb}<div class="rh"><span class="rn">${["I","II","III","IV","V","VI","VII"][i]}</span><div><h2>${esc(r.name)}</h2><p>${esc(r.blurb)}</p></div></div>
     <div class="chips">${r.rules.map(k=>`<span class="chip">${RULE_INFO[k][0]}</span>`).join("")}${(r.rules.includes("same")||r.rules.includes("plus"))?`<span class="chip">Combo</span>`:""}<span class="chip trade">${TRADE_INFO[r.trade][0]}</span></div>`;
     if(locked){const prev=REGIONS[i-1].opps.find(o=>o.boss);h+=`<div class="sub">Sealed. Defeat ${esc(prev.n)} in ${esc(REGIONS[i-1].name)} to break the seal.</div>`;}
     else{
@@ -1441,7 +1475,7 @@ function renderMatch(){
   let h=`<div class="mtop"><span class="brand">${brand}</span><div class="where">${esc(m.region.name)}${m.round>1?` · Sudden Death round ${m.round}`:""}</div>${has("rewind")&&!m.two&&!m.rewound&&m.hist&&myTurn?`<button class="mbtn" data-a="rewind">Rewind</button>`:""}<button class="mbtn" data-a="m-menu">Menu</button></div>
   <div class="match">
    <div class="side o ${st.turn==="o"&&m.phase==="play"?"active":""}"><div class="who"><span class="dot"></span>${m.two?`<span class="pt">${m.opp.p}</span>`:ptHTML(m.opp)}<span class="nm">${esc(m.opp.n)}</span><span class="sc">${score(st,"o")}</span></div><div class="hand">${oHand}</div></div>
-   <div class="mid"><div class="mrules">${chips}</div><div class="board-wrap"><div class="board">${cells}</div><div class="banner" id="banner"></div></div><div class="status">${status}</div></div>
+   <div class="mid"><div class="mrules">${chips}</div><div class="board-wrap"><div class="board ${m.free||!m.opp||m.opp.region==null?"":"b-"+slugOf(REGIONS[m.opp.region].name)} ${!m.free&&m.opp&&m.opp.boss?"b-boss":""}">${cells}</div><div class="banner" id="banner"></div></div><div class="status">${status}</div></div>
    <div class="side p ${st.turn==="p"&&m.phase==="play"?"active":""}"><div class="who"><span class="dot"></span><span class="pt">🛡️</span><span class="nm">${esc(save.name)}</span><span class="sc">${score(st,"p")}</span></div><div class="hand">${pHand}</div></div>
   </div>`;
   if(m.phase==="end"||m.phase==="done")h+=m.two?renderTwoResult():renderResult();
