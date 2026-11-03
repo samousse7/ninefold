@@ -12,3 +12,6 @@ Any name works: "Ashgrove Academy.png" becomes `ashgrove-academy.jpg` automatica
 - `the-shattered-isle.jpg`  The Shattered Isle
 - `the-citadel-of-ages.jpg`  The Citadel of Ages
 - `free-battle.jpg`  Free Battle and two-player duels
+
+Optional boss backgrounds: add `-boss` to the region name (e.g. `ashgrove-academy-boss.jpg`) for a dedicated image in boss duels.
+Without one, boss duels use a darker, more dramatic version of the region background.
