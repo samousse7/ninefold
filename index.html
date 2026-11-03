@@ -237,14 +237,14 @@ h3{margin:0;font:700 1rem/1.2 var(--f-display);color:var(--gold-hi);letter-spaci
 /* ---------- pre-duel ---------- */
 .foe{display:flex;gap:14px;align-items:center}
 .foe .pt{font-size:3rem;flex:none;text-shadow:none}
-.pt.has-img{display:inline-block;flex:none;border-radius:50%;overflow:hidden;background:#05071c;vertical-align:middle;
+.pt.has-img{display:inline-block;flex:none;padding:0;margin-left:0;aspect-ratio:1;border-radius:50%;overflow:hidden;background:#05071c;vertical-align:middle;
   box-shadow:0 0 0 2px #c9d2e6,0 0 0 3px rgba(0,0,0,.5),0 3px 10px rgba(0,0,0,.5)}
-.pt.has-img.boss{box-shadow:0 0 0 2px var(--gold),0 0 0 3px rgba(80,50,0,.6),0 0 14px rgba(255,214,110,.45),0 3px 10px rgba(0,0,0,.5)}
+.pt.has-img.pt-boss{box-shadow:0 0 0 2px var(--gold),0 0 0 3px rgba(80,50,0,.6),0 0 14px rgba(255,214,110,.45),0 3px 10px rgba(0,0,0,.5)}
 .pt.has-img img{display:block;width:100%;height:100%;object-fit:cover}
 .opp .pt.has-img{width:2.9rem;height:2.9rem}
 .foe .pt.has-img{width:7.5rem;height:7.5rem;border-radius:18px}
 .who .pt.has-img{width:1.8rem;height:1.8rem;box-shadow:0 0 0 1.5px #c9d2e6}
-.who .pt.has-img.boss{box-shadow:0 0 0 1.5px var(--gold)}
+.who .pt.has-img.pt-boss{box-shadow:0 0 0 1.5px var(--gold)}
 .pt.has-img.xs{width:1.6rem;height:1.6rem;box-shadow:0 0 0 1.5px #c9d2e6;margin-right:4px}
 @media (max-width:520px){.foe .pt.has-img{width:5.5rem;height:5.5rem;border-radius:14px}}
 .quote{font-style:italic;color:var(--muted);margin:2px 0 0}
@@ -701,7 +701,7 @@ const PORTRAITS=new Set(/*PORTRAITS*/["cadet-pip", "headmaster-rowan", "instruct
 const slugOf=s=>String(s).normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
 function ptHTML(o,cls=""){
   const s=o&&o.n?slugOf(o.n):"";
-  if(s&&PORTRAITS.has(s))return `<span class="pt has-img ${o.boss?"boss":""} ${cls}"><img src="images/opponents/${s}.jpg" alt=""></span>`;
+  if(s&&PORTRAITS.has(s))return `<span class="pt has-img ${o.boss?"pt-boss":""} ${cls}"><img src="images/opponents/${s}.jpg" alt=""></span>`;
   return `<span class="pt ${cls}">${o?o.p:""}</span>`;
 }
 
