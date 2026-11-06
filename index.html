@@ -87,6 +87,65 @@ body.scened .who,body.scened .status,body.scened .mrules,body.scened .mtop .wher
 #scene.boss::after{background:radial-gradient(60% 55% at 50% 50%,rgba(20,5,0,.35),rgba(10,2,0,.75) 80%)}
 #scene.boss.own{filter:none}
 #scene.boss.own::after{background:radial-gradient(70% 60% at 50% 50%,rgba(3,5,26,.5),rgba(3,5,26,.25) 75%),linear-gradient(180deg,rgba(3,5,26,.6),rgba(3,5,26,.2) 30%,rgba(3,5,26,.2) 70%,rgba(3,5,26,.65))}
+
+/* ---------- Boss entrance, in the spirit of classic 16/32-bit RPG battle intros ---------- */
+#app.swirling{animation:ffswirl calc(.85s * var(--ispd,1)) cubic-bezier(.55,0,.8,.4) forwards;transform-origin:50% 45%}
+@keyframes ffswirl{0%{transform:none;filter:none}35%{filter:brightness(1.6) saturate(1.6) contrast(1.2)}
+  100%{transform:scale(2.6) rotate(40deg);filter:blur(12px) brightness(3);opacity:0}}
+.swirl{position:fixed;top:0;right:0;bottom:0;left:0;z-index:79;pointer-events:none;overflow:hidden}
+.swirl::before{content:"";position:absolute;left:50%;top:45%;width:260vmax;height:260vmax;margin:-130vmax 0 0 -130vmax;
+  background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.0) 0 7deg,rgba(190,225,255,.55) 7deg 9deg,rgba(255,255,255,0) 9deg 16deg);
+  animation:ffspin calc(.85s * var(--ispd,1)) linear forwards;mix-blend-mode:screen}
+.swirl::after{content:"";position:absolute;top:0;right:0;bottom:0;left:0;background:#fff;opacity:0;animation:ffwhite calc(.85s * var(--ispd,1)) ease-in forwards}
+@keyframes ffspin{from{transform:rotate(0) scale(.2);opacity:0}30%{opacity:1}to{transform:rotate(300deg) scale(1);opacity:1}}
+@keyframes ffwhite{0%,55%{opacity:0}85%{opacity:.9}100%{opacity:1;background:#03051a}}
+.intro{position:fixed;top:0;right:0;bottom:0;left:0;z-index:80;background:#03051a;overflow:hidden;cursor:pointer;-webkit-user-select:none;user-select:none;
+  font-family:var(--f-body);color:var(--text)}
+.intro[hidden]{display:none}
+.intro .ibg{position:absolute;top:-4%;right:-4%;bottom:-4%;left:-4%;background:center/cover no-repeat;opacity:0;transform:scale(1.12);
+  animation:ibg calc(1.4s * var(--ispd,1)) ease-out forwards}
+.intro .ibg::after{content:"";position:absolute;top:0;right:0;bottom:0;left:0;background:radial-gradient(70% 70% at 60% 45%,transparent,rgba(3,5,26,.75)),linear-gradient(90deg,rgba(3,5,26,.7),transparent 55%)}
+@keyframes ibg{to{opacity:1;transform:scale(1.02)}}
+.intro .bar{position:absolute;left:0;right:0;height:11vh;background:#000;z-index:3;transform:scaleY(0);animation:ibar calc(.5s * var(--ispd,1)) ease-out forwards}
+.intro .bar.t{top:0;transform-origin:top}.intro .bar.b{bottom:0;transform-origin:bottom}
+@keyframes ibar{to{transform:scaleY(1)}}
+.intro .stage{position:absolute;top:11vh;bottom:11vh;left:0;right:0;z-index:2;display:flex;align-items:center;justify-content:center;gap:4vw;padding:0 5vw 150px;box-sizing:border-box}
+.intro .por{position:relative;flex:none;width:min(40vh,42vw);max-height:100%;aspect-ratio:1;border-radius:22px;overflow:hidden;opacity:0;transform:translateX(30vw) scale(1.05);
+  box-shadow:0 0 0 3px var(--gold),0 0 0 5px rgba(60,35,0,.7),0 0 50px rgba(255,200,90,.45),0 18px 50px rgba(0,0,0,.7);
+  animation:ipor calc(.75s * var(--ispd,1)) cubic-bezier(.2,.9,.25,1.15) calc(.35s * var(--ispd,1)) forwards;background:#05071c}
+.intro .por img{display:block;width:100%;height:100%;object-fit:cover}
+.intro .por .em{display:grid;place-items:center;width:100%;height:100%;font-size:min(22vh,24vw)}
+.intro .por::after{content:"";position:absolute;top:0;right:0;bottom:0;left:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.45) 48%,transparent 60%);
+  background-size:260% 100%;background-position:130% 0;animation:holo 1.6s ease-in-out calc(1s * var(--ispd,1)) 1 forwards}
+@keyframes ipor{60%{opacity:1}to{opacity:1;transform:none}}
+.intro .plate{max-width:44vw;opacity:0;transform:translateX(-6vw);animation:iplate calc(.55s * var(--ispd,1)) ease-out calc(.75s * var(--ispd,1)) forwards}
+@keyframes iplate{to{opacity:1;transform:none}}
+.intro .plate .reg{font:700 clamp(.7rem,1.8vw,.95rem)/1 var(--f-display);letter-spacing:.28em;text-transform:uppercase;color:var(--muted)}
+.intro .plate .btag{display:inline-block;margin:12px 0 8px;font:800 clamp(.7rem,1.6vw,.85rem)/1 var(--f-body);letter-spacing:.3em;color:#2a1c05;background:linear-gradient(180deg,var(--gold-hi),var(--gold));padding:5px 10px 4px;border-radius:4px}
+.intro .plate h2{margin:0;font:900 clamp(1.9rem,5.6vw,3.6rem)/1.02 var(--f-logo);letter-spacing:.03em;color:var(--gold-hi);
+  text-shadow:0 0 22px rgba(255,200,90,.55),0 3px 0 #2a1c05,0 0 2px #000}
+.intro .plate .line{margin-top:14px;height:2px;width:0;background:linear-gradient(90deg,var(--gold),transparent);animation:iline calc(.6s * var(--ispd,1)) ease-out calc(1.1s * var(--ispd,1)) forwards}
+@keyframes iline{to{width:100%}}
+.intro .dlg{position:absolute;z-index:4;left:50%;bottom:calc(11vh + 18px);transform:translate(-50%,20px);width:min(820px,calc(100% - 32px));box-sizing:border-box;
+  padding:16px 22px 18px;opacity:0;animation:idlg calc(.35s * var(--ispd,1)) ease-out calc(1.25s * var(--ispd,1)) forwards}
+@keyframes idlg{to{opacity:1;transform:translate(-50%,0)}}
+.intro .dlg .who{font:700 .8rem/1 var(--f-display);letter-spacing:.2em;text-transform:uppercase;color:var(--gold-hi);margin-bottom:8px;text-shadow:1px 1px 0 #000}
+.intro .dlg .txt{font:500 clamp(1rem,2.4vw,1.25rem)/1.45 var(--f-body);min-height:2.9em;text-shadow:1px 1px 0 #000}
+.intro .dlg .cur{position:absolute;right:16px;bottom:10px;color:var(--gold-hi);font-size:.9rem;opacity:0}
+.intro.done .dlg .cur{opacity:1;animation:icur .7s steps(2) infinite}
+@keyframes icur{50%{transform:translateY(3px);opacity:.3}}
+.intro .skip{position:absolute;z-index:5;top:calc(11vh + 12px);right:16px;font:700 .75rem var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+  background:rgba(3,5,26,.5);border:1px solid rgba(230,234,252,.3);border-radius:999px;padding:6px 12px}
+.intro .flash{position:absolute;top:0;right:0;bottom:0;left:0;z-index:9;background:#fff;opacity:0;pointer-events:none}
+.intro.go .flash{animation:iflash .45s ease-out forwards}
+@keyframes iflash{0%{opacity:0}35%{opacity:1}100%{opacity:1}}
+@media (max-width:640px){
+  .intro .stage{flex-direction:column;justify-content:center;gap:16px;padding-bottom:22vh}
+  .intro .por{width:min(34vh,62vw)}
+  .intro .plate{max-width:none;text-align:center;transform:translateY(12px)}
+  .intro .plate .line{margin:12px auto 0;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+}
+@media (prefers-reduced-motion:reduce){#app.swirling{animation:none;opacity:0}.swirl::before{display:none}}
 #fx{position:fixed;top:0;right:0;bottom:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
 #app{position:relative;z-index:1;max-width:980px;margin:0 auto}
 button{font:inherit;color:inherit;cursor:pointer}
@@ -506,6 +565,8 @@ button.slot:hover,button.slot:focus-visible{border-color:var(--gold-hi);backgrou
 <canvas id="fx" aria-hidden="true"></canvas>
 <div id="app"></div>
 <div id="toast" class="toast" hidden></div>
+<div id="intro" class="intro" hidden></div>
+<div id="swirl" class="swirl" hidden></div>
 <button id="updbar" class="updbar" hidden>New version available <b>Update</b></button>
 
 <script>
@@ -1046,6 +1107,7 @@ const Music={
   pick(){
     // which track should be playing right now
     let k="title";
+    if(typeof Intro!=="undefined"&&Intro.on&&Intro.o)return {track:this.missing.boss?"r"+Intro.o.region:"boss"};
     if(view==="pre"&&preOpp&&OPP[preOpp])k="r"+OPP[preOpp].region;
     if(view==="match"&&match){
       if(match.phase==="done"&&match.result){
@@ -1782,7 +1844,7 @@ const H={
   "title-ask"(){if(dirty){arm="title";render();return;}save=null;match=null;go("title");},
   "title-go"(){save=null;match=null;dirty=false;go("title");},
   duel(d){preOpp=d.o;go("pre");},
-  begin(){startMatch(regionCfg(preOpp));},
+  begin(){if(OPP[preOpp]&&OPP[preOpp].boss&&!Intro.on)Intro.start(preOpp);else startMatch(regionCfg(preOpp));},
   rematch(){startMatch(lastCfg);},
   "two-ready"(){if(match){match.handoff=false;sfx.select();render();}},
   "two-quit"(){match=null;go("free");},
@@ -1936,6 +1998,48 @@ const PWA={
     if(pending&&!this.polling){this.polling=true;setTimeout(()=>{this.polling=false;if(view==="options")this.paint();},2000);}
   }
 };
+
+/* ================= BOSS ENTRANCE ================= */
+const Intro={on:false,o:null,typing:null,full:"",
+  start(id){
+    const o=OPP[id];if(!o){startMatch(regionCfg(id));return;}
+    this.on=true;this.o=o;
+    const spd=Math.max(.35,SPEED[opt().speed]||1);document.documentElement.style.setProperty("--ispd",String(spd));this.spd=spd;
+    Music.update();
+    const sw=document.getElementById("swirl");sw.hidden=false;sw.style.animation="none";void sw.offsetWidth;sw.style.animation="";
+    app.classList.add("swirling");sfx.rule();
+    setTimeout(()=>this.show(),850*spd);
+  },
+  show(){
+    const o=this.o,r=REGIONS[o.region],s=slugOf(r.name),bg=SCENES.has(s+"-boss")?s+"-boss":SCENES.has(s)?s:null,ps=slugOf(o.n);
+    const el=document.getElementById("intro");
+    el.innerHTML=`${bg?`<div class="ibg" style="background-image:url('images/regions/${bg}.jpg')"></div>`:""}<div class="bar t"></div><div class="bar b"></div>
+      <div class="stage"><div class="por">${PORTRAITS.has(ps)?`<img src="images/opponents/${ps}.jpg" alt="">`:`<span class="em">${o.p}</span>`}</div>
+      <div class="plate"><div class="reg">${esc(r.name)}</div><div class="btag">BOSS</div><h2>${esc(o.n)}</h2><div class="line"></div></div></div>
+      <div class="dlg win"><div class="who">${esc(o.n)}</div><div class="txt"></div><span class="cur">▼</span></div>
+      <button class="skip" data-k="skip">Skip ›</button><div class="flash"></div>`;
+    el.className="intro";el.hidden=false;
+    document.getElementById("swirl").hidden=true;app.classList.remove("swirling");
+    this.full=o.q||"";const t=el.querySelector(".txt");let i=0;
+    clearInterval(this.typing);
+    setTimeout(()=>{if(!this.on)return;this.typing=setInterval(()=>{i++;t.textContent=this.full.slice(0,i);if(i>=this.full.length)this.finishType();},Math.max(12,32*this.spd));},1350*this.spd);
+  },
+  finishType(){clearInterval(this.typing);this.typing=null;const el=document.getElementById("intro");const t=el.querySelector(".txt");if(t)t.textContent=this.full;el.classList.add("done");},
+  tap(skip){
+    const el=document.getElementById("intro");if(!this.on||el.hidden)return;
+    if(!skip&&!el.classList.contains("done")){this.finishType();return;}
+    this.go();
+  },
+  go(){
+    if(this.leaving)return;this.leaving=true;
+    const el=document.getElementById("intro");el.classList.add("go");sfx.select();
+    setTimeout(()=>{const id=this.o.id;this.on=false;this.o=null;startMatch(regionCfg(id));
+      el.style.transition="opacity .4s";el.style.opacity="0";
+      setTimeout(()=>{el.hidden=true;el.innerHTML="";el.style.opacity="";el.style.transition="";this.leaving=false;},420);},300);
+  }
+};
+document.getElementById("intro").addEventListener("click",e=>{Intro.tap(!!e.target.closest("[data-k=skip]"));});
+document.addEventListener("keydown",e=>{if(Intro.on&&(e.key==="Enter"||e.key===" "||e.key==="Escape")){e.preventDefault();Intro.tap(e.key==="Escape");}});
 
 /* ================= BOOT ================= */
 PWA.init();
