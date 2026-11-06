@@ -5,9 +5,9 @@
    A new list means a new version: the game then shows "New version available". */
 
 /*ASSETS*/
-const VERSION = "1d8c88a9d5";
+const VERSION = "13b41ea858";
 const ASSETS = {
-  "index.html": "79c410b9ed",
+  "index.html": "f30cfe3493",
   "manifest.webmanifest": "0f389e690a",
   "icons/apple-touch-icon.png": "049c5cd7fc",
   "icons/icon-192.png": "4aab68718b",
@@ -128,10 +128,15 @@ const ASSETS = {
   "images/cards/wild-unicorn.jpeg": "9c33294774",
   "images/cards/wraith-widow.jpeg": "c48442d579",
   "images/cards/yuki-onna.jpg": "ef470b0254",
+  "images/opponents/archivist-bern.jpg": "244995c0c4",
+  "images/opponents/arena-champion-dace.jpg": "2bae865a4a",
+  "images/opponents/brother-aske.jpg": "af953e12a9",
   "images/opponents/cadet-pip.jpg": "4d4367c1c9",
   "images/opponents/captain-brannoch.jpg": "6f7985f4ab",
+  "images/opponents/card-shark-lise.jpg": "0ee64d8736",
   "images/opponents/chaplain-corvin.jpg": "c6fed862ca",
   "images/opponents/deckhand-wes.jpg": "4d782ffdd3",
+  "images/opponents/duke-aurelian.jpg": "55e726820f",
   "images/opponents/fishmonger-odile.jpg": "ea9b5d731f",
   "images/opponents/guard-juno.jpg": "f81cd2c014",
   "images/opponents/harbormaster-quill.jpg": "f36d968768",
@@ -139,6 +144,9 @@ const ASSETS = {
   "images/opponents/inmate-ostra.jpg": "e164f57afd",
   "images/opponents/instructor-tobin.jpg": "a5930d86c6",
   "images/opponents/librarian-marla.jpg": "8b23146f40",
+  "images/opponents/sister-ylva.jpg": "1bbbf5be64",
+  "images/opponents/steward-malchior.jpg": "b6f46ffc8b",
+  "images/opponents/the-silent-abbot.jpg": "aaddcfe08c",
   "images/opponents/warden-halde.jpg": "2871b7f837",
   "images/regions/ashgrove-academy-boss.jpg": "1312e42d65",
   "images/regions/ashgrove-academy.jpg": "7b3d4db10c",
