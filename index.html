@@ -489,6 +489,10 @@ button.slot:hover,button.slot:focus-visible{border-color:var(--gold-hi);backgrou
 .seg button.on{background:var(--gold);color:#2a1c05}
 @media (max-width:460px){.opt{grid-template-columns:1fr}.opt .seg{justify-self:start}}
 .field{display:grid;gap:6px}
+.bulk .opt:first-of-type{border-top:0}
+.bulk-confirm{display:grid;gap:10px;padding:12px;border:1px solid var(--red-hi);border-radius:10px;background:rgba(255,90,120,.08)}
+.bulk-list{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.85rem;color:var(--muted);max-height:9.5em;overflow:auto}
+.bulk-list b{color:var(--text)}
 .updbar{position:fixed;left:50%;bottom:calc(66px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:70;max-width:calc(100% - 32px);
   display:flex;align-items:center;gap:10px;padding:8px 10px 8px 16px;border-radius:12px;border:2px solid var(--gold);color:var(--text);font:700 .92rem var(--f-body);
   background:linear-gradient(180deg,var(--win-top),var(--win-bot));box-shadow:inset 0 0 0 2px var(--win-ink),0 8px 24px rgba(0,0,0,.55);text-shadow:1px 1px 0 #000}
@@ -1195,7 +1199,7 @@ function applyOptions(){document.documentElement.style.setProperty("--spd",Strin
 const app=document.getElementById("app");
 let view="title",freeOpp=null,lastCfg=null,retView={},preOpp=null,match=null,deckDraft=null,deckFilter=0,albumLv=1,modal=null,bigClean=false,toastT=0;
 let arm=null,newName="",newSlot=0;
-let reveal=null,shopTab="packs",sellArm=null,catLv=1,catMissing=true;
+let reveal=null,shopTab="packs",sellArm=null,catLv=1,catMissing=true,bulkLv=5,bulkKeep=1,bulkArm=false;
 function toast(msg,ms=1900){const t=document.getElementById("toast");t.textContent=msg;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,ms);}
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 function go(v){arm=null;view=v;render();window.scrollTo(0,0);}
@@ -1759,11 +1763,30 @@ function renderShop(){
        return `<div class="gi">${!save.col[id]&&!sold?`<span class="badge new">NEW</span>`:""}${cardHTML(id,"n",sold?"seen":"")}<span class="nm">${esc(c.n)}</span><span class="ct">Lv ${c.lv} · ${TIER[tierOf(c.lv)]}</span>${sold?`<span class="ct">Bought</span>`:`<button class="btn sm" data-a="buy-card" data-k="${k}" ${save.gil<pr?"disabled":""}>${fmtG(pr)}</button>`}</div>`;}).join("")+`</div></div>`;
   }else{
     const ids=Object.keys(save.col).map(Number).filter(id=>save.col[id]>0).sort((a,b)=>(save.col[b]-save.col[a])||(CARDS[a].lv-CARDS[b].lv));
-    h+=`<div class="win stack"><div class="sub">Sell spare cards for gil. You always keep at least 5 cards.</div><div class="grid">`+
+    const bl=bulkPlan(),keepOpts=has("refine")?[[1,"1 copy"],[3,"3 copies (for Refine)"]]:[[1,"1 copy"]];
+    h+=`<div class="win stack bulk"><p class="win-t" style="margin:0">Sell duplicates</p>
+     <div class="sub">Sell your spare copies in one go. You always keep ${bulkKeep===1?"one copy":"three copies"} of each card, and every copy in your hand of five.</div>
+     <div class="opt"><div style="font-weight:800">Cards up to</div><div class="seg" role="group">${[3,5,7,9].map(l=>`<button class="${bulkLv===l?"on":""}" data-a="bulk-lv" data-l="${l}">Lv ${l}</button>`).join("")}</div></div>
+     ${keepOpts.length>1?`<div class="opt"><div style="font-weight:800">Keep</div><div class="seg" role="group">${keepOpts.map(([k,l])=>`<button class="${bulkKeep===k?"on":""}" data-a="bulk-keep" data-k="${k}">${l}</button>`).join("")}</div></div>`:""}
+     ${bl.count?(bulkArm?`<div class="bulk-confirm"><div style="font-weight:800">Sell ${num(bl.count)} card${bl.count>1?"s":""} for ${fmtG(bl.gil)}?</div>
+        <div class="bulk-list">${bl.items.map(x=>`<span>${esc(CARDS[x.id].n)} <b>×${x.n}</b></span>`).join("")}</div>
+        <div class="row"><button class="btn danger" data-a="bulk-go">Confirm sale</button><button class="btn ghost" data-a="bulk-cancel">Cancel</button></div></div>`
+       :`<div class="row" style="justify-content:space-between"><span class="sub">${num(bl.count)} spare card${bl.count>1?"s":""} across ${bl.items.length} kind${bl.items.length>1?"s":""} · ${fmtG(bl.gil)}</span><button class="btn" data-a="bulk-arm">Sell duplicates · ${fmtG(bl.gil)}</button></div>`)
+      :`<div class="sub" style="color:var(--good)">No spare copies at level ${bulkLv} or below.</div>`}</div>
+     <div class="win stack"><div class="sub">Or sell cards one by one. You always keep at least 5 cards.</div><div class="grid">`+
      ids.map(id=>{const c=CARDS[id],n=save.col[id],a=sellArm===id;
        return `<div class="gi">${n>1?`<span class="badge">×${n}</span>`:""}${cardHTML(id,"n")}<span class="nm">${esc(c.n)}</span><span class="ct">Lv ${c.lv}</span><button class="btn ${a?"danger":"ghost"} sm" data-a="sell" data-c="${id}" ${tot<=5?"disabled":""}>${a?"Sell last copy?":"Sell · "+num(sellPrice(c.lv))}</button></div>`;}).join("")+`</div></div>`;
   }
   return h+`</div>`;
+}
+// Spare copies to sell in bulk: cards up to bulkLv, keeping bulkKeep copies of each and every copy in the hand of five.
+function bulkPlan(){
+  const inDeck={};(save.deck||[]).forEach(id=>inDeck[id]=(inDeck[id]||0)+1);
+  const items=[];let count=0,gil=0;
+  Object.keys(save.col).map(Number).forEach(id=>{const c=CARDS[id],n=save.col[id]||0;if(c.lv>bulkLv)return;
+    const keep=Math.max(bulkKeep,inDeck[id]||0),sell=n-keep;if(sell>0){items.push({id,n:sell});count+=sell;gil+=sell*sellPrice(c.lv);}});
+  items.sort((a,b)=>CARDS[a.id].lv-CARDS[b.id].lv||b.n-a.n);
+  return {items,count,gil};
 }
 function renderReveal(){
   if(!reveal)return "";
@@ -1909,7 +1932,7 @@ const H={
   "m-forfeit"(){const m=match;if(m.busy||m.phase!=="play")return;finalize(score(m.st,"p"),score(m.st,"o"),true);},
   pick(d){const p=match.result.pick,k=+d.k,ix=p.chosen.indexOf(k);if(ix>=0)p.chosen.splice(ix,1);else{if(p.chosen.length>=p.n)p.chosen.shift();p.chosen.push(k);}sfx.select();render();},
   "pick-ok"(){const m=match,p=m.result.pick;if(p.chosen.length!==p.n)return;const add=p.chosen.map(k=>m.origO[k]);m.result.pick=null;commit(m.origP.concat(add));},
-  "shop-tab"(d){shopTab=d.k;sellArm=null;render();},
+  "shop-tab"(d){shopTab=d.k;sellArm=null;bulkArm=false;render();},
   "buy-pack"(d){const p=PACKS.find(x=>x.id===d.k),pr=packPrice(p);if(save.gil<pr)return;save.gil-=pr;const ids=openPack(p),fresh=addCards(ids);sfx.rule();reveal={title:p.n,ids,fresh};autosave();render();},
   "merch-roll"(){if(save.gil<40)return;save.gil-=40;genMerch();autosave();render();toast("The merchant brings out new stock");},
   "buy-card"(d){const k=+d.k,id=save.merch.ids[k];if(save.merch.sold[k])return;const pr=buyPrice(CARDS[id].lv);if(save.gil<pr)return;
@@ -1918,6 +1941,14 @@ const H={
     if(save.col[id]===1&&sellArm!==id){sellArm=id;render();return;}
     sellArm=null;const pr=sellPrice(CARDS[id].lv);save.col[id]--;if(save.col[id]<=0)delete save.col[id];save.gil+=pr;
     if(!deckValid(save.deck,save.col))save.deck=autoDeck(save.col);toast("Sold "+CARDS[id].n+" for "+fmtG(pr));autosave();render();},
+  "bulk-lv"(d){bulkLv=+d.l;bulkArm=false;render();},
+  "bulk-keep"(d){bulkKeep=+d.k;bulkArm=false;render();},
+  "bulk-arm"(){bulkArm=true;render();},
+  "bulk-cancel"(){bulkArm=false;render();},
+  "bulk-go"(){const bl=bulkPlan();bulkArm=false;if(!bl.count){render();return;}
+    bl.items.forEach(x=>{save.col[x.id]-=x.n;if(save.col[x.id]<=0)delete save.col[x.id];});save.gil+=bl.gil;
+    if(!deckValid(save.deck,save.col))save.deck=autoDeck(save.col);
+    sfx.select();toast("Sold "+num(bl.count)+" cards for "+fmtG(bl.gil),2600);autosave();render();},
   "reveal-ok"(){reveal=null;render();},
   "cat-lv"(d){const l=+d.l;if(catOpen(l)){catLv=l;render();}},
   "cat-miss"(d){catMissing=d.v==="1";render();},
