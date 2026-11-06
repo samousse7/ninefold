@@ -5,9 +5,9 @@
    A new list means a new version: the game then shows "New version available". */
 
 /*ASSETS*/
-const VERSION = "23e313891e";
+const VERSION = "19ad2582d8";
 const ASSETS = {
-  "index.html": "e3708e37f6",
+  "index.html": "c58ce5af40",
   "manifest.webmanifest": "0f389e690a",
   "icons/apple-touch-icon.png": "049c5cd7fc",
   "icons/icon-192.png": "4aab68718b",
@@ -129,6 +129,10 @@ const ASSETS = {
   "images/cards/wraith-widow.jpeg": "c48442d579",
   "images/cards/yuki-onna.jpg": "ef470b0254",
   "images/opponents/cadet-pip.jpg": "4d4367c1c9",
+  "images/opponents/captain-brannoch.jpg": "6f7985f4ab",
+  "images/opponents/deckhand-wes.jpg": "4d782ffdd3",
+  "images/opponents/fishmonger-odile.jpg": "ea9b5d731f",
+  "images/opponents/harbormaster-quill.jpg": "f36d968768",
   "images/opponents/headmaster-rowan.jpg": "92ff056c55",
   "images/opponents/instructor-tobin.jpg": "a5930d86c6",
   "images/opponents/librarian-marla.jpg": "8b23146f40",
