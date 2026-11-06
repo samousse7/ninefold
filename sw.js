@@ -5,9 +5,9 @@
    A new list means a new version: the game then shows "New version available". */
 
 /*ASSETS*/
-const VERSION = "e4f3a29245";
+const VERSION = "516c5bf3ac";
 const ASSETS = {
-  "index.html": "228ac22828",
+  "index.html": "ceba4e3fb9",
   "manifest.webmanifest": "0f389e690a",
   "icons/apple-touch-icon.png": "049c5cd7fc",
   "icons/icon-192.png": "4aab68718b",
@@ -146,7 +146,10 @@ const ASSETS = {
   "images/opponents/headmaster-rowan.jpg": "92ff056c55",
   "images/opponents/inmate-ostra.jpg": "e164f57afd",
   "images/opponents/instructor-tobin.jpg": "a5930d86c6",
+  "images/opponents/lady-seraphine.jpg": "2531d8e61b",
   "images/opponents/librarian-marla.jpg": "8b23146f40",
+  "images/opponents/mira-the-collector.jpg": "2bbe408b62",
+  "images/opponents/old-gus.jpg": "6f2d552e75",
   "images/opponents/sister-ylva.jpg": "1bbbf5be64",
   "images/opponents/star-oracle-imre.jpg": "c2576dce24",
   "images/opponents/steward-malchior.jpg": "b6f46ffc8b",
@@ -155,6 +158,7 @@ const ASSETS = {
   "images/opponents/the-silent-abbot.jpg": "aaddcfe08c",
   "images/opponents/the-twin-archivists.jpg": "627e0e1651",
   "images/opponents/the-witch-of-ages.jpg": "af5d58a324",
+  "images/opponents/twin-blades-kai.jpg": "347e9908c0",
   "images/opponents/warden-halde.jpg": "2871b7f837",
   "images/regions/ashgrove-academy-boss.jpg": "1312e42d65",
   "images/regions/ashgrove-academy.jpg": "7b3d4db10c",
