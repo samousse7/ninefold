@@ -5,9 +5,9 @@
    A new list means a new version: the game then shows "New version available". */
 
 /*ASSETS*/
-const VERSION = "13b41ea858";
+const VERSION = "e4f3a29245";
 const ASSETS = {
-  "index.html": "f30cfe3493",
+  "index.html": "228ac22828",
   "manifest.webmanifest": "0f389e690a",
   "icons/apple-touch-icon.png": "049c5cd7fc",
   "icons/icon-192.png": "4aab68718b",
@@ -134,10 +134,13 @@ const ASSETS = {
   "images/opponents/cadet-pip.jpg": "4d4367c1c9",
   "images/opponents/captain-brannoch.jpg": "6f7985f4ab",
   "images/opponents/card-shark-lise.jpg": "0ee64d8736",
+  "images/opponents/castaway-oren.jpg": "a609fbdab1",
   "images/opponents/chaplain-corvin.jpg": "c6fed862ca",
+  "images/opponents/citadel-sentinel.jpg": "74d8291550",
   "images/opponents/deckhand-wes.jpg": "4d782ffdd3",
   "images/opponents/duke-aurelian.jpg": "55e726820f",
   "images/opponents/fishmonger-odile.jpg": "ea9b5d731f",
+  "images/opponents/ghost-sailor-fenn.jpg": "5f4b49ce42",
   "images/opponents/guard-juno.jpg": "f81cd2c014",
   "images/opponents/harbormaster-quill.jpg": "f36d968768",
   "images/opponents/headmaster-rowan.jpg": "92ff056c55",
@@ -145,8 +148,13 @@ const ASSETS = {
   "images/opponents/instructor-tobin.jpg": "a5930d86c6",
   "images/opponents/librarian-marla.jpg": "8b23146f40",
   "images/opponents/sister-ylva.jpg": "1bbbf5be64",
+  "images/opponents/star-oracle-imre.jpg": "c2576dce24",
   "images/opponents/steward-malchior.jpg": "b6f46ffc8b",
+  "images/opponents/storm-witch-nell.jpg": "e1a826a237",
+  "images/opponents/the-drowned-king.jpg": "3bd7dd54c1",
   "images/opponents/the-silent-abbot.jpg": "aaddcfe08c",
+  "images/opponents/the-twin-archivists.jpg": "627e0e1651",
+  "images/opponents/the-witch-of-ages.jpg": "af5d58a324",
   "images/opponents/warden-halde.jpg": "2871b7f837",
   "images/regions/ashgrove-academy-boss.jpg": "1312e42d65",
   "images/regions/ashgrove-academy.jpg": "7b3d4db10c",
