@@ -5,9 +5,9 @@
    A new list means a new version: the game then shows "New version available". */
 
 /*ASSETS*/
-const VERSION = "463f7e4b8a";
+const VERSION = "59daa0c7fa";
 const ASSETS = {
-  "index.html": "207db0d64d",
+  "index.html": "4bf1f01ea6",
   "manifest.webmanifest": "0f389e690a",
   "icons/apple-touch-icon.png": "049c5cd7fc",
   "icons/icon-192.png": "4aab68718b",
@@ -139,14 +139,17 @@ const ASSETS = {
   "images/opponents/chaplain-corvin.jpg": "c6fed862ca",
   "images/opponents/citadel-sentinel.jpg": "74d8291550",
   "images/opponents/deckhand-wes.jpg": "4d782ffdd3",
+  "images/opponents/desert-nomad-sahr.jpg": "6d0a4e1b08",
   "images/opponents/duke-aurelian.jpg": "55e726820f",
   "images/opponents/fishmonger-odile.jpg": "ea9b5d731f",
+  "images/opponents/fortune-teller-zara.jpg": "360636caa6",
   "images/opponents/ghost-sailor-fenn.jpg": "5f4b49ce42",
   "images/opponents/guard-juno.jpg": "f81cd2c014",
   "images/opponents/harbormaster-quill.jpg": "f36d968768",
   "images/opponents/headmaster-rowan.jpg": "92ff056c55",
   "images/opponents/inmate-ostra.jpg": "e164f57afd",
   "images/opponents/instructor-tobin.jpg": "a5930d86c6",
+  "images/opponents/knight-commander-hale.jpg": "5f310c4f04",
   "images/opponents/lady-seraphine.jpg": "2531d8e61b",
   "images/opponents/librarian-marla.jpg": "8b23146f40",
   "images/opponents/mira-the-collector.jpg": "2bbe408b62",
@@ -163,6 +166,7 @@ const ASSETS = {
   "images/opponents/the-twin-archivists.jpg": "627e0e1651",
   "images/opponents/the-witch-of-ages.jpg": "af5d58a324",
   "images/opponents/twin-blades-kai.jpg": "347e9908c0",
+  "images/opponents/wandering-bard-elio.jpg": "c663f86e5a",
   "images/opponents/warden-halde.jpg": "2871b7f837",
   "images/regions/ashgrove-academy-boss.jpg": "1312e42d65",
   "images/regions/ashgrove-academy.jpg": "7b3d4db10c",
