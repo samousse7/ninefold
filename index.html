@@ -720,11 +720,11 @@ const CARDS=[],usedR={};
 RAW.forEach((arr,li)=>arr.forEach(([n,g,e],k)=>{const id=li*11+k,lv=li+1;let s=id*7919+101,r=genRanks(s,lv);
   while(usedR[r.join()]){s+=17;r=genRanks(s,lv);}usedR[r.join()]=1;CARDS.push({id,n,g,e,lv,r});}));
 const byName=n=>CARDS.find(c=>c.n===n).id;
-CARDS[byName("The Witch of Ages")].r=[10,8,4,10];
+CARDS[byName("The Witch of Ages")].r=[9,8,4,9];
 CARDS[byName("Bahamut")].r=[10,9,3,7];
 const tierOf=lv=>lv<=5?1:lv<=7?2:lv<=9?3:4;
 const TIER=["","Monster","Elite Monster","Summon","Legend"];
-const DIFF=["","Novice","Adept","Expert","Master"];
+const DIFF=["","Novice","Adept","Expert","Master","Legend"];
 const sumR=c=>c.r.reduce((a,b)=>a+b,0);
 const rv=v=>v>=10?"A":v;
 
@@ -735,12 +735,12 @@ const RULE_INFO={
   wall:["Same Wall","Board edges count as A for the Same rule."],
   combo:["Combo","Cards flipped by Same or Plus go on to capture their weaker neighbours."],
   elemental:["Elemental","Marked squares give +1 to a card of that element and -1 to every other card."],
-  random:["Random","Your hand is dealt at random from your collection."],
+  random:["Random","Your hand is dealt at random from your 15 strongest cards."],
   sudden:["Sudden Death","A draw restarts the game, each side keeping the cards in its colour."]
 };
 const TRADE_INFO={
   one:["Trade: One","The winner takes one card of their choice from the loser's hand."],
-  diff:["Trade: Diff","The winner takes one card for each point of score difference."],
+  diff:["Trade: Diff","The winner takes one card for each point of score difference, up to two."],
   direct:["Trade: Direct","Every card ends with whoever holds it in their colour."],
   all:["Trade: All","The winner takes every card in the loser's hand."],
   none:["Trade: None","A friendly duel. No cards change hands."]
@@ -749,8 +749,8 @@ const DIFFS=[
  {n:"Novice",ai:1,lv:[1,3],d:"A relaxed opponent who often misplays. Carries level 1 to 3 monsters."},
  {n:"Adept",ai:2,lv:[3,5],d:"Plays the best capture it can see. Carries level 3 to 5 monsters."},
  {n:"Expert",ai:3,lv:[5,7],d:"Thinks a move ahead. Carries strong monsters and elite monsters."},
- {n:"Master",ai:4,lv:[7,9],d:"Reads several moves ahead and plays the endgame perfectly. Carries elites and summons."},
- {n:"Legendary",ai:4,lv:[9,10],d:"Master play with the strongest summons and legendary heroes. The best rewards in the game."}
+ {n:"Master",ai:4,lv:[7,9],d:"Reads ahead and plays the last moves perfectly. Carries elites and summons."},
+ {n:"Legendary",ai:5,lv:[9,10],d:"Near-perfect play with the strongest summons and legendary heroes. The best rewards in the game."}
 ];
 const WANDERERS=[
  {n:"Mira the Collector",p:"🧝",q:"I travel the world for one reason. Your cards."},
@@ -787,13 +787,13 @@ const REGIONS=[
   {id:"aske",n:"Brother Aske",p:"🧑‍🎓",ai:2,lv:[4,5],q:"I am still learning. Please be gentle."},
   {id:"ylva",n:"Sister Ylva",p:"👩‍🦳",ai:3,lv:[4,6],q:"Count twice. Plus forgives nothing."},
   {id:"bern",n:"Archivist Bern",p:"🧑‍🏫",ai:3,lv:[5,6],q:"I have recorded every game played here."},
-  {id:"abbot",n:"The Silent Abbot",p:"🧘",ai:4,lv:[5,7],boss:1,rare:"Fenrir",q:"..."}]},
+  {id:"abbot",n:"The Silent Abbot",p:"🧘",ai:3,lv:[5,7],boss:1,rare:"Fenrir",q:"..."}]},
  {name:"Aurum, the Floating City",blurb:"A city held aloft by ancient engines, full of gilded card halls and nobles who hate losing.",rules:["open","same","plus","wall"],trade:"diff",opps:[
   {id:"lise",n:"Card Shark Lise",p:"💃",ai:3,lv:[5,6],q:"Fancy a friendly game? It won't be friendly."},
   {id:"malchior",n:"Steward Malchior",p:"🤵",ai:3,lv:[5,7],q:"The Duke's cards are polished daily. By me."},
   {id:"dace",n:"Arena Champion Dace",p:"🤺",ai:4,lv:[6,7],rare:"Kogan the Earthshaker",q:"Forty-one wins in the arena. Kogan taught me every one."},
-  {id:"duke",n:"Duke Aurelian",p:"👑",ai:4,lv:[6,8],boss:1,rare:"Bahamut",q:"Gold buys anything. Except the dragon that keeps this city in the sky."}]},
- {name:"The Shattered Isle",blurb:"A storm-wrecked isle. Random hands, cursed ground, and every card on the board is at stake.",rules:["random","sudden","elemental","plus"],trade:"direct",opps:[
+  {id:"duke",n:"Duke Aurelian",p:"👑",ai:4,lv:[6,7],boss:1,rare:"Bahamut",q:"Gold buys anything. Except the dragon that keeps this city in the sky."}]},
+ {name:"The Shattered Isle",blurb:"A storm-wrecked isle. Random hands, cursed ground and sudden death.",rules:["random","sudden","elemental","plus"],trade:"one",opps:[
   {id:"oren",n:"Castaway Oren",p:"🏝️",ai:3,lv:[6,7],q:"Washed ashore with nothing but a deck."},
   {id:"nell",n:"Storm Witch Nell",p:"🌪️",ai:4,lv:[6,8],q:"The squares are mine to curse."},
   {id:"fenn",n:"Ghost Sailor Fenn",p:"⚓",ai:4,lv:[7,8],rare:"Rhea the Tidecaller",q:"Drowned a hundred years. Still undefeated."},
@@ -802,7 +802,7 @@ const REGIONS=[
   {id:"sentinel",n:"Citadel Sentinel",p:"🗡️",ai:4,lv:[7,9],q:"None pass without a game."},
   {id:"imre",n:"Star Oracle Imre",p:"🌠",ai:4,lv:[8,9],rare:"Lune the Lightbringer",q:"I have already seen how this ends."},
   {id:"twins",n:"The Twin Archivists",p:"👯",ai:4,lv:[8,10],rare:"Sera the Golden Arrow",q:"We play as one. We think as one."},
-  {id:"sage",n:"The Witch of Ages",p:"⏳",ai:4,lv:[9,10],boss:1,rare:"The Witch of Ages",q:"Every card in history passes through my hands. Yours will too."}]}
+  {id:"sage",n:"The Witch of Ages",p:"⏳",ai:4,lv:[8,10],boss:1,rare:"The Witch of Ages",q:"Every card in history passes through my hands. Yours will too."}]}
 ];
 const OPP={};REGIONS.forEach((r,ri)=>r.opps.forEach(o=>{o.region=ri;if(o.rare)o.rareId=byName(o.rare);OPP[o.id]=o;}));
 // Opponent portraits: images/opponents/<name-in-lowercase-with-hyphens>.jpg
@@ -902,7 +902,14 @@ function aiChoose(st,lvl,R){
   if(lvl===1){return Math.random()<.5?mv[ri(mv.length)].m:mv[ri(Math.min(3,mv.length))].m;}
   if(lvl===2){return(Math.random()<.22&&mv[1])?mv[1].m:mv[0].m;}
   const empty=st.board.filter(x=>!x).length;
-  const depth=lvl===3?2:(empty<=6?empty:3);
+  // 3 Expert: two moves ahead. 4 Master: perfect only for the last four cards, and one move in eight
+  // is its second choice (tuned by simulation so good players can finish the story).
+  // 5 Legend (Free Battle only): the original near-perfect Master.
+  const depth=lvl===3?2:lvl===4?(empty<=4?empty:2):(empty<=6?empty:3);
+  if(lvl===4){
+    const sc=mv.map(({m})=>({m,v:-negamax(apply(st,m.h,m.c,R),depth-1,-Infinity,Infinity,R)})).sort((a,b)=>b.v-a.v);
+    return (Math.random()<.125&&sc[1])?sc[1].m:sc[0].m;
+  }
   let best=-Infinity,bm=mv[0].m,alpha=-Infinity;
   for(const {m} of mv){
     const v=-negamax(apply(st,m.h,m.c,R),depth-1,-Infinity,-alpha,R);
@@ -1206,7 +1213,7 @@ function cardHTML(cid,own,cls="",extra=""){
 }
 const backHTML=(cls="")=>`<div class="card back ${cls}"><div class="sig"></div></div>`;
 const ghostHTML=()=>`<div class="card ghost"><div class="art"><span class="q">?</span></div></div>`;
-const pips=n=>"●".repeat(n)+"○".repeat(4-n);
+const pips=n=>"●".repeat(Math.min(4,n))+"○".repeat(Math.max(0,4-n));
 const brand=`<span class="gem"></span><span class="wm">Ninefold</span>`;
 function header(active){
   if(!save)return `<header class="top"><button class="brand" data-a="title">${brand}</button><nav><button data-a="back">Back</button></nav></header>`;
@@ -1323,6 +1330,7 @@ function renderGuide(){
   <dt>Regions</dt><dd>Each region adds its own rules. Beat its boss to open the next, where opponents play smarter and carry stronger cards.</dd><dt>Free Battle</dt><dd>Choose any difficulty, switch each rule on or off and set the stakes. Higher difficulties bring higher level cards to win. Free battles count toward your record but do not open regions or award rare cards.</dd>
   ${Object.keys(RULE_INFO).map(k=>`<dt>${RULE_INFO[k][0]}</dt><dd>${RULE_INFO[k][1]}</dd>`).join("")}
   ${Object.keys(TRADE_INFO).map(k=>`<dt>${TRADE_INFO[k][0]}</dt><dd>${TRADE_INFO[k][1]}</dd>`).join("")}
+  <dt>Lucky charm</dt><dd>When you lose cards, your opponent takes them at random from your hand, and your strongest card in the duel is always safe.</dd>
   <dt>Gil and the Card Shop</dt><dd>Every duel pays gil: a lot for wins, a little for draws and losses. Harder opponents, bosses and bigger winning margins pay more. Spend gil in the Shop on card packs, on single cards from the merchant, whose stock changes after every duel, or on the exact card you want from the Catalogue. The Catalogue sells levels 1 to 5 from the start and opens higher levels as your rank rises. Higher level cards cost much more, but you never have to beat a Master to own one. Spare cards can be sold back.</dd>
   <dt>Levels and perks</dt><dd>Duels also earn XP. Each level up pays gil and a free card pack, and certain levels unlock perks such as shop discounts, seeing hidden cards, fusing duplicates into stronger cards and taking back a move. See Rank &amp; Perks in the Menu.</dd>
   <dt>Saving</dt><dd>Your journey lives in one of three slots. With autosave on, the current slot updates after every duel. Use Save Game from the Menu to copy it into another slot.</dd>
@@ -1510,14 +1518,16 @@ function twoCfg(){
   if(n===save.name)n+=" (2)";
   return {two:true,opp:{id:"p2",n,p:"⚔️",ai:0,lv:d.lv,rareId:null,deck,col},region:{name:"Two Players · same device"},rules:freeRules(),trade:"none",free:true};
 }
+// Random rule: five cards drawn from your 15 strongest, so a big collection of weak cards is not a handicap.
+function randomHand(col){return shuffle(expand(col).sort((a,b)=>strength(b)-strength(a)).slice(0,15)).slice(0,5);}
 function startMatch(cfg){
   if(cfg.two)cfg=twoCfg();
   lastCfg=cfg;
   const o=cfg.opp,r=cfg.region,R=cfg.rules;
   if(!deckValid(save.deck,save.col))save.deck=autoDeck(save.col);
-  const pIds=R.random?shuffle(expand(save.col)).slice(0,5):save.deck.slice();
+  const pIds=R.random?randomHand(save.col):save.deck.slice();
   const p=pIds.map((cid,k)=>({cid,origin:"p",uid:"p"+k}));
-  const oIds=cfg.two?(R.random&&o.col?shuffle(expand(o.col)).slice(0,5):o.deck?o.deck.slice():genOppDeck(o)):genOppDeck(o);
+  const oIds=cfg.two?(R.random&&o.col?randomHand(o.col):o.deck?o.deck.slice():genOppDeck(o)):genOppDeck(o);
   const oi=oIds.map((cid,k)=>({cid,origin:"o",uid:"o"+k}));
   match={opp:o,region:r,rules:R,trade:cfg.trade,free:cfg.free,round:1,roundHands:{p,o:oi},origP:p.slice(),origO:oi.slice(),revealed:[],hist:null,rewound:false,st:null,sel:null,aiSel:null,pend:null,busy:false,phase:"play",result:null,placed:null,menu:false,forfeitArm:false,two:!!cfg.two,handoff:false};
   if(cfg.two){}
@@ -1587,7 +1597,7 @@ function renderMatchMenu(){
    <div class="lbl">Quick options</div>
    ${OPTS.filter(o=>["speed","music","sound","hints","confirm"].includes(o[0])).map(([k,n,d,ch])=>`<div class="opt"><div style="font-weight:800">${n}</div>${segHTML(k,ch)}</div>`).join("")}
    ${m.two?`<div class="lbl">Leave</div><div class="row"><button class="btn ghost sm" data-a="two-quit">Quit this duel</button></div>`:`<div class="lbl">Forfeit</div>
-   ${m.forfeitArm?`<div class="sub">${m.trade==="none"?"You lose the duel. This is a friendly duel, so no cards change hands.":"You lose the duel and "+esc(m.opp.n)+" takes your strongest card in this hand."}</div><div class="row"><button class="btn danger" data-a="m-forfeit">Forfeit duel</button><button class="btn ghost" data-a="m-unarm">Keep playing</button></div>`
+   ${m.forfeitArm?`<div class="sub">${m.trade==="none"?"You lose the duel. This is a friendly duel, so no cards change hands.":"You lose the duel and "+esc(m.opp.n)+" takes one card from this hand at random. Your strongest card is always safe."}</div><div class="row"><button class="btn danger" data-a="m-forfeit">Forfeit duel</button><button class="btn ghost" data-a="m-unarm">Keep playing</button></div>`
    :`<div class="row"><button class="btn ghost sm" data-a="m-farm" ${canForfeit?"":"disabled"}>Forfeit this duel</button>${canForfeit?"":`<span class="sub">Available on your turn.</span>`}</div>`}`}
   </div></div>`;
 }
@@ -1652,12 +1662,14 @@ function finalize(sp,so,forfeit){
   if(m.trade==="none"){commit(m.origP);return;}
   if(!forfeit&&m.trade==="direct"){commit(possession(m.st,"p"));return;}
   if(!winner){commit(m.origP);return;}
-  const n=forfeit?1:m.trade==="one"?1:m.trade==="all"?5:Math.min(5,Math.abs(sp-so));
+  const n=forfeit?1:m.trade==="one"?1:m.trade==="all"?5:Math.min(2,Math.abs(sp-so));
   if(winner==="p"){
     if(n>=m.origO.length){commit(m.origP.concat(m.origO));return;}
     m.result.pick={n,chosen:[]};render();return;
   }
-  const take=m.origP.slice().sort((a,b)=>strength(b.cid)-strength(a.cid)).slice(0,n);
+  // Lucky charm: your strongest card in the duel is never taken; the opponent takes at random from the rest.
+  const best=m.origP.slice().sort((a,b)=>strength(b.cid)-strength(a.cid))[0];
+  const take=shuffle(m.origP.filter(x=>x!==best)).slice(0,n);
   const tk=new Set(take.map(x=>x.uid));
   commit(m.origP.filter(x=>!tk.has(x.uid)));
 }
