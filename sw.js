@@ -5,9 +5,9 @@
    A new list means a new version: the game then shows "New version available". */
 
 /*ASSETS*/
-const VERSION = "59daa0c7fa";
+const VERSION = "b486001929";
 const ASSETS = {
-  "index.html": "4bf1f01ea6",
+  "index.html": "69df403a91",
   "manifest.webmanifest": "0f389e690a",
   "icons/apple-touch-icon.png": "049c5cd7fc",
   "icons/icon-192.png": "4aab68718b",
