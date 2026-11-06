@@ -55,6 +55,7 @@ def asset_list():
     for folder in ("cards", "opponents", "regions"):
         files += sorted(p for p in (ROOT / "images" / folder).glob("*") if p.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp"})
     files += sorted(MUSIC.glob("*.mp3"))
+    files += sorted((ROOT / "sfx").glob("*.mp3"))
     table = {}
     for f in files:
         if f.is_file():
@@ -74,6 +75,17 @@ def write_list(marker, folder, label):
         print(f"index.html updated: {len(names)} {label}")
 
 
+def write_sfx():
+    """Tell the game which sound effects exist (sfx/*.mp3)."""
+    game = ROOT / "index.html"
+    names = sorted(p.stem for p in (ROOT / "sfx").glob("*.mp3"))
+    text = game.read_text(encoding="utf-8")
+    new = re.sub(r"/\*SFX\*/.*?/\*END\*/", lambda m: "/*SFX*/" + json.dumps(names) + "/*END*/", text, flags=re.S)
+    if new != text:
+        game.write_text(new, encoding="utf-8")
+        print(f"index.html updated: {len(names)} sound effect(s)")
+
+
 def write_sw(table):
     version = hashlib.sha1(json.dumps(table, sort_keys=True).encode()).hexdigest()[:10]
     lines = ",\n".join(f'  {json.dumps(k)}: "{v}"' for k, v in table.items())
@@ -90,4 +102,5 @@ def write_sw(table):
 compress_music()
 write_list("PORTRAITS", "opponents", "opponent portrait(s)")
 write_list("SCENES", "regions", "region background(s)")
+write_sfx()
 write_sw(asset_list())

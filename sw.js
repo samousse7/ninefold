@@ -5,9 +5,9 @@
    A new list means a new version: the game then shows "New version available". */
 
 /*ASSETS*/
-const VERSION = "b486001929";
+const VERSION = "35076673b9";
 const ASSETS = {
-  "index.html": "69df403a91",
+  "index.html": "faa417d85f",
   "manifest.webmanifest": "0f389e690a",
   "icons/apple-touch-icon.png": "049c5cd7fc",
   "icons/icon-192.png": "4aab68718b",
@@ -185,7 +185,16 @@ const ASSETS = {
   "images/regions/the-shattered-isle.jpg": "ea083be844",
   "music/ashgrove.mp3": "cb053b4681",
   "music/port-ravel.mp3": "a93278ddc2",
-  "music/title.mp3": "f3a3952af0"
+  "music/title.mp3": "f3a3952af0",
+  "sfx/combo.mp3": "59ef9452ff",
+  "sfx/draw.mp3": "573d733dc7",
+  "sfx/flip.mp3": "e35a5697cc",
+  "sfx/level-up.mp3": "408a02f39e",
+  "sfx/lose.mp3": "f309417c64",
+  "sfx/place.mp3": "81237caa27",
+  "sfx/select.mp3": "4907993b48",
+  "sfx/tick.mp3": "68de2149f4",
+  "sfx/win.mp3": "bcd0c3d489"
 };
 /*END*/
 
