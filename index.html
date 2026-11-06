@@ -1054,15 +1054,30 @@ let actx=null;
 function ac(){if(!opt().sound)return null;if(!actx){try{actx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){return null;}}if(actx.state==="suspended")actx.resume();return actx;}
 function tone(f,t0,dur,type="sine",vol=.1){const a=ac();if(!a)return;const o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.value=f;const t=a.currentTime+t0;
   g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+dur+.05);}
+// Sound effects: sfx/<name>.mp3 when present (list filled in by scripts/build_offline.py),
+// otherwise the original synthesised tones.
+const SFX_FILES=new Set(/*SFX*/["combo", "draw", "flip", "level-up", "lose", "place", "select", "tick", "win"]/*END*/);
+const SFX_VOL={tick:.35,select:.55,place:.75,flip:.6,combo:.7,win:.8,lose:.7,draw:.7,"level-up":.75};
+const SFXBUF={};let sfxLoading=false;
+function loadSfx(a){
+  if(sfxLoading||!a)return;sfxLoading=true;
+  SFX_FILES.forEach(k=>{fetch("sfx/"+k+".mp3").then(r=>r.ok?r.arrayBuffer():Promise.reject()).then(b=>new Promise((res,rej)=>a.decodeAudioData(b,res,rej))).then(buf=>{SFXBUF[k]=buf;}).catch(()=>{});});
+}
+function playSfx(k){
+  const a=ac();if(!a)return true;   // sound off: stay silent
+  loadSfx(a);const b=SFXBUF[k];if(!b)return false;
+  const s=a.createBufferSource(),g=a.createGain();s.buffer=b;g.gain.value=SFX_VOL[k]??.7;s.connect(g);g.connect(a.destination);s.start();return true;
+}
 const sfx={
-  tick(){tone(1320,0,.05,"square",.025);},
-  select(){tone(880,0,.08,"triangle",.07);tone(1320,.05,.1,"triangle",.05);},
-  place(){tone(150,0,.2,"sine",.22);tone(300,0,.08,"triangle",.05);},
-  flip(){tone(784,0,.16,"triangle",.07);tone(1175,.06,.22,"sine",.06);},
-  rule(){[523,659,784,1047,1319].forEach((f,i)=>tone(f,i*.06,.35,"triangle",.07));},
-  win(){[[523,0],[659,.14],[784,.28],[1047,.42],[784,.62],[1047,.78]].forEach(([f,t],i)=>tone(f,t,i===5?.9:.22,"triangle",.09));},
-  lose(){[392,349,311,262].forEach((f,i)=>tone(f,i*.2,.45,"sine",.1));},
-  draw(){[523,494,523].forEach((f,i)=>tone(f,i*.18,.3,"triangle",.07));}
+  tick(){if(!playSfx("tick"))tone(1320,0,.05,"square",.025);},
+  select(){if(!playSfx("select")){tone(880,0,.08,"triangle",.07);tone(1320,.05,.1,"triangle",.05);}},
+  place(){if(!playSfx("place")){tone(150,0,.2,"sine",.22);tone(300,0,.08,"triangle",.05);}},
+  flip(){if(!playSfx("flip")){tone(784,0,.16,"triangle",.07);tone(1175,.06,.22,"sine",.06);}},
+  rule(){if(!playSfx("combo"))[523,659,784,1047,1319].forEach((f,i)=>tone(f,i*.06,.35,"triangle",.07));},
+  win(){if(!playSfx("win"))[[523,0],[659,.14],[784,.28],[1047,.42],[784,.62],[1047,.78]].forEach(([f,t],i)=>tone(f,t,i===5?.9:.22,"triangle",.09));},
+  lose(){if(!playSfx("lose"))[392,349,311,262].forEach((f,i)=>tone(f,i*.2,.45,"sine",.1));},
+  draw(){if(!playSfx("draw"))[523,494,523].forEach((f,i)=>tone(f,i*.18,.3,"triangle",.07));},
+  levelup(){if(!playSfx("level-up"))[659,784,988,1319].forEach((f,i)=>tone(f,i*.08,.3,"triangle",.07));}
 };
 
 /* ================= MUSIC =================
@@ -1146,7 +1161,7 @@ const Music={
     if(!this.unlocked){this.unlocked=true;this.update();}
   }
 };
-["pointerdown","keydown","touchend"].forEach(ev=>document.addEventListener(ev,()=>Music.unlock(),{passive:true}));
+["pointerdown","keydown","touchend"].forEach(ev=>document.addEventListener(ev,()=>{Music.unlock();if(opt().sound)loadSfx(ac());},{passive:true}));
 document.addEventListener("visibilitychange",()=>{
   if(!Music.ctx)return;
   if(document.visibilityState==="hidden")Music.ctx.suspend().catch(()=>{});
@@ -1663,6 +1678,7 @@ function commit(P){
   const rw=battleRewards(m,res);res.gil=rw.gil;res.xp=rw.xp;
   save.gil+=rw.gil;st.gilTotal=(st.gilTotal||0)+rw.gil;
   res.ups=gainXP(rw.xp);
+  if(res.ups.length)setTimeout(()=>sfx.levelup(),res.winner==="p"?2600:1800);
   genMerch();
   if(!deckValid(save.deck,save.col))save.deck=autoDeck(save.col);
   m.phase="done";

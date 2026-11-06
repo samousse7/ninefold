@@ -10,6 +10,7 @@ on:
     paths:
       - "images/**"
       - "music/**"
+      - "sfx/**"
       - "index.html"
       - "fonts/**"
       - "icons/**"
@@ -46,7 +47,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A images music index.html sw.js
+          git add -A images music sfx index.html sw.js
           if git diff --cached --quiet; then
             echo "Nothing to update"
           else
