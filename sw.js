@@ -5,9 +5,9 @@
    A new list means a new version: the game then shows "New version available". */
 
 /*ASSETS*/
-const VERSION = "516c5bf3ac";
+const VERSION = "463f7e4b8a";
 const ASSETS = {
-  "index.html": "ceba4e3fb9",
+  "index.html": "207db0d64d",
   "manifest.webmanifest": "0f389e690a",
   "icons/apple-touch-icon.png": "049c5cd7fc",
   "icons/icon-192.png": "4aab68718b",
@@ -130,6 +130,7 @@ const ASSETS = {
   "images/cards/yuki-onna.jpg": "ef470b0254",
   "images/opponents/archivist-bern.jpg": "244995c0c4",
   "images/opponents/arena-champion-dace.jpg": "2bae865a4a",
+  "images/opponents/bounty-hunter-rook.jpg": "e3947be10c",
   "images/opponents/brother-aske.jpg": "af953e12a9",
   "images/opponents/cadet-pip.jpg": "4d4367c1c9",
   "images/opponents/captain-brannoch.jpg": "6f7985f4ab",
@@ -150,11 +151,14 @@ const ASSETS = {
   "images/opponents/librarian-marla.jpg": "8b23146f40",
   "images/opponents/mira-the-collector.jpg": "2bbe408b62",
   "images/opponents/old-gus.jpg": "6f2d552e75",
+  "images/opponents/professor-alder.jpg": "6e87efdcaa",
   "images/opponents/sister-ylva.jpg": "1bbbf5be64",
+  "images/opponents/sky-pirate-vex.jpg": "90905bc202",
   "images/opponents/star-oracle-imre.jpg": "c2576dce24",
   "images/opponents/steward-malchior.jpg": "b6f46ffc8b",
   "images/opponents/storm-witch-nell.jpg": "e1a826a237",
   "images/opponents/the-drowned-king.jpg": "3bd7dd54c1",
+  "images/opponents/the-masked-stranger.jpg": "93a313173d",
   "images/opponents/the-silent-abbot.jpg": "aaddcfe08c",
   "images/opponents/the-twin-archivists.jpg": "627e0e1651",
   "images/opponents/the-witch-of-ages.jpg": "af5d58a324",
